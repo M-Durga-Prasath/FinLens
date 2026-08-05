@@ -1,0 +1,11 @@
+{
+  "name": "finance-rag",
+  "private": true,
+  "version": "1.0.0",
+  "scripts": {
+    "start": "concurrently -k -n frontend,backend -c cyan,green \"npm --prefix frontend run dev\" \"npm --prefix backend run dev\""
+  },
+  "devDependencies": {
+    "concurrently": "^9.0.1"
+  }
+}

@@ -1,0 +1,37 @@
+
+#Backend
+fastapi
+uvicorn[standard]
+python-dotenv
+pydantic
+
+# Database
+asyncpg
+psycopg2-binary
+
+# Machine Learning
+torch
+sentence-transformers
+transformers
+
+# Retrieval
+rank-bm25
+numpy
+scikit-learn
+
+# PDF Processing
+pymupdf
+
+
+# LLM
+groq
+# ollama
+
+
+# Utilities
+tqdm
+orjson
+
+# Testing
+pytest
+httpx
