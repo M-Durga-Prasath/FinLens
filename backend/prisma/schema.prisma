@@ -4,15 +4,26 @@
 // Get a free hosted Postgres database in seconds: `npx create-db`
 
 generator client {
-  provider = "prisma-client"
-  output   = "../generated/prisma"
-  // previewFeatures = ["postgresqlExtensions"]
+  provider        = "prisma-client"
+  output          = "../generated/prisma"
+  previewFeatures = ["postgresqlExtensions"]
 }
 
 datasource db {
-  provider = "postgresql"
+  provider   = "postgresql"
   // url      = env("DATABASE_URL")
-  // extensions = [vector]
+  extensions = [vector]
+}
+
+enum Role {
+  USER
+  MODEL
+}
+
+enum DocStatus {
+  PROCESSING
+  READY
+  FAILED
 }
 
 model User {
@@ -23,8 +34,8 @@ model User {
   googleId  String?  @unique @map("google_id")
   createdAt DateTime @default(now()) @map("created_at")
 
-  session Session[]
-  documents    Document[]
+  session   Session[]
+  documents Document[]
 
   @@map("users")
 }
@@ -32,32 +43,84 @@ model User {
 model Session {
   id    String  @id @default(uuid()) @db.Uuid
   title String?
-  
+
   createdAt DateTime @default(now()) @map("created_at")
+  updatedAt DateTime @updatedAt
+  userId String @db.Uuid
+  user   User   @relation(fields: [userId], references: [id], onDelete: Cascade)
 
-  userId String  @db.Uuid
-  user  User    @relation(fields: [userId], references: [id], onDelete: Cascade)
-  
   documents Document[]
+  messages  Message[]
 
-  @@map("session")
-
+  @@index([userId, createdAt(sort: Desc)])
+  @@map("sessions")
 }
 
-model Document{
-  id    String  @id @default(uuid()) @db.Uuid
-  createdAt DateTime @default(now()) @map("created_at")
-  
-  SessionId String @db.Uuid
-  session Session @relation(fields: [SessionId], references: [id], onDelete: Cascade)
+model Document {
+  id        String    @id @default(uuid()) @db.Uuid
+  createdAt DateTime  @default(now()) @map("created_at")
+  filename  String
+  filetype  String?
+  status    DocStatus @default(PROCESSING)
+  sessionId String    @db.Uuid
+  session   Session   @relation(fields: [sessionId], references: [id], onDelete: Cascade)
 
-  userId String  @db.Uuid
-  user  User    @relation(fields: [userId], references: [id], onDelete: Cascade)
+  userId String @db.Uuid
+  user   User   @relation(fields: [userId], references: [id], onDelete: Cascade)
 
+  chunks Chunk[]
+
+  @@index([sessionId])
+  @@index([userId])
   @@map("documents")
 }
 
+model Message {
+  id        String   @id @default(uuid()) @db.Uuid
+  role      Role
+  content   String
+  createdAt DateTime @default(now()) @map("created_at")
 
+  sessionId String  @db.Uuid
+  session   Session @relation(fields: [sessionId], references: [id], onDelete: Cascade)
 
+  Citations Citation[]
 
+  @@index([sessionId, createdAt])
+  @@map("messages")
+}
 
+model Chunk {
+  id String @id @default(uuid()) @db.Uuid
+
+  embedding Unsupported("vector(384)")
+  content    String
+  chunkIndex Int
+  pageNumber Int?
+
+  tokenCount Int
+
+  documentId String   @db.Uuid
+  document   Document @relation(fields: [documentId], references: [id], onDelete: Cascade)
+
+  Citations Citation[]
+
+  @@index([documentId])
+  @@map("chunks")
+}
+
+model Citation {
+  id String @id @default(uuid()) @db.Uuid
+
+  relevanceScore Float
+
+  chunkId String @db.Uuid
+  chunk   Chunk @relation(fields: [chunkId], references: [id], onDelete: Cascade)
+
+  messageId String  @db.Uuid
+  message   Message @relation(fields: [messageId], references: [id], onDelete: Cascade)
+
+  @@index([messageId])
+  @@index([chunkId])
+  @@map("citations")
+}
