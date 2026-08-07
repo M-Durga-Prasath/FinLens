@@ -1,37 +1,52 @@
-
-#Backend
+# FastAPI Backend
 fastapi
 uvicorn[standard]
-python-dotenv
+python-multipart
 pydantic
-
-# Database
-asyncpg
-psycopg2-binary
-
-# Machine Learning
-torch
-sentence-transformers
-transformers
-
-# Retrieval
-rank-bm25
-numpy
-scikit-learn
+pydantic-settings
 
 # PDF Processing
 pymupdf
+pypdf
+BeautifulSoup
+python-docx
 
+# Chunking
+langchain-text-splitters
+tiktoken
 
-# LLM
+# Embeddings & Reranking
+sentence-transformers
+transformers
+torch
+accelerate
+
+# Vector Search
+pgvector
+numpy
+scikit-learn
+
+# Sparse Retrieval
+rank-bm25
+
+# Database
+asyncpg
+psycopg[binary]
+
+# LLM Providers
+# openai
+# google-genai
 groq
-# ollama
 
+# Logging
+python-json-logger
 
 # Utilities
-tqdm
+python-dotenv
 orjson
+httpx
+tenacity
 
 # Testing
 pytest
-httpx
+pytest-asyncio
