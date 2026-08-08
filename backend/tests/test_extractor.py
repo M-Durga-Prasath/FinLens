@@ -23,7 +23,14 @@ async def test_upload_doc_normalizes_content_type(monkeypatch):
         filename = "notes.txt"
         content_type = "text/plain; charset=utf-8"
 
-        async def read(self):
+        def __init__(self):
+            self.called = False
+
+        async def read(self, size=1):
+            if self.called:
+                return b""
+
+            self.called = True
             return b"hello world"
 
     async def fake_extract_text(file_bytes, content_type):
@@ -40,20 +47,34 @@ async def test_upload_doc_normalizes_content_type(monkeypatch):
 
 @pytest.mark.asyncio
 async def test_upload_doc_returns_422_for_extraction_error(monkeypatch):
+
     class DummyUploadFile:
         filename = "notes.txt"
         content_type = "text/plain"
 
-        async def read(self):
+        def __init__(self):
+            self.called = False
+
+        async def read(self, size=-1):
+            if self.called:
+                return b""
+
+            self.called = True
             return b"hello world"
 
     def fake_extract_text(*args, **kwargs):
         raise ExtractionError("Document is empty")
 
-    monkeypatch.setattr(upload_module, "extract_text", fake_extract_text)
+    monkeypatch.setattr(
+        upload_module,
+        "extract_text",
+        fake_extract_text
+    )
 
     with pytest.raises(Exception) as exc_info:
-        await upload_module.upload_doc(file=DummyUploadFile())
+        await upload_module.upload_doc(
+            file=DummyUploadFile()
+        )
 
     assert exc_info.value.status_code == 422
     assert exc_info.value.detail == "Document is empty"

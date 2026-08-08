@@ -1,21 +1,9 @@
 import inspect
-
 from fastapi import APIRouter, HTTPException, File, UploadFile
-from pydantic import BaseModel
 
+from app.schemas.utils import ExtractedPage, UploadResponse
 from app.services.extractor import ExtractionError, extract_text
-
-
-class ExtractedPage(BaseModel):
-    page_number: int
-    text: str
-
-
-class UploadResponse(BaseModel):
-    filename: str
-    content_type: str
-    page_count: int
-    pages: list[ExtractedPage]
+from app.services.cleaner import clean_text
 
 
 router = APIRouter(
@@ -44,18 +32,30 @@ async def upload_doc(file: UploadFile = File(...)):
             detail=f"Unsupported file type: {file.content_type}"
         )
 
-    file_bytes = await file.read()
+    chunks = []
+    total_size = 0
+    while chunk:= await file.read(CHUNK_SIZE):
+        if not chunk:
+            break
+        
+        total_size += len(chunk)
 
-    if len(file_bytes) > MAX_FILE_SIZE:
-        raise HTTPException(
-            status_code=413,
-            detail="File too large."
-        )
-
+        if total_size > MAX_FILE_SIZE:
+            raise HTTPException(
+                status_code=413,
+                detail="File too large."
+            )
+        chunks.append(chunk)
+        
+    file_bytes = b"".join(chunks)
+    
     try:
         extracted_pages = extract_text(file_bytes, normalized_content_type)
         if inspect.isawaitable(extracted_pages):
             extracted_pages = await extracted_pages
+        
+        cleaned_pages = clean_text(extracted_pages)
+            
     except ExtractionError as exc:
         raise HTTPException(
             status_code=422,
@@ -65,6 +65,6 @@ async def upload_doc(file: UploadFile = File(...)):
     return UploadResponse(
         filename=file.filename,
         content_type=file.content_type,
-        page_count=len(extracted_pages),
-        pages=extracted_pages,
+        page_count=len(cleaned_pages),
+        pages=cleaned_pages,
     )
