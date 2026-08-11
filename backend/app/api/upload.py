@@ -4,6 +4,7 @@ from fastapi import APIRouter, HTTPException, File, UploadFile
 from app.schemas.utils import ExtractedPage, UploadResponse
 from app.services.extractor import ExtractionError, extract_text
 from app.services.cleaner import clean_text
+from app.services.chunking import chunk_text
 
 
 router = APIRouter(
@@ -55,6 +56,8 @@ async def upload_doc(file: UploadFile = File(...)):
             extracted_pages = await extracted_pages
         
         cleaned_pages = clean_text(extracted_pages)
+        chunks = chunk_text(cleaned_pages)
+        
             
     except ExtractionError as exc:
         raise HTTPException(
@@ -67,4 +70,5 @@ async def upload_doc(file: UploadFile = File(...)):
         content_type=file.content_type,
         page_count=len(cleaned_pages),
         pages=cleaned_pages,
+        chunks = chunks,
     )
