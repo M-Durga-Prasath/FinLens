@@ -21,7 +21,7 @@ export default function Home() {
 
       {/* Radial fade overlay — keeps center content readable */}
       <div
-        className="pointer-events-none absolute inset-0 z-[1]"
+        className="pointer-events-none absolute inset-0 z-1"
         style={{
           background:
             "radial-gradient(ellipse at center, rgba(10,10,10,0.85) 0%, rgba(10,10,10,0.4) 70%, rgba(10,10,10,0.2) 100%)",
@@ -29,7 +29,7 @@ export default function Home() {
       />
 
       {/* Content */}
-      <main className="relative z-[2] flex w-full max-w-2xl flex-col items-center px-6 py-20 text-center">
+      <main className="relative z-2 flex w-full max-w-2xl flex-col items-center px-6 py-20 text-center">
         {/* Logo */}
         <div className="mb-8 flex items-center gap-3">
           <svg
