@@ -5,15 +5,20 @@ import { useSession, signOut } from "next-auth/react";
 import Link from "next/link";
 
 export default function Sidebar({
-  chats,
+  chats = [],
   activeChatId,
   onNewChat,
   onSelectChat,
+  onDeleteChat,
+  onRenameChat,
 }) {
   const { data: session } = useSession();
   const user = session?.user;
   const [collapsed, setCollapsed] = useState(false);
   const [showUserMenu, setShowUserMenu] = useState(false);
+  const [editingChatId, setEditingChatId] = useState(null);
+  const [editingTitle, setEditingTitle] = useState("");
+  const [deletingChat, setDeletingChat] = useState(null);
 
   const initials = user?.name
     ? user.name
@@ -23,6 +28,43 @@ export default function Sidebar({
         .toUpperCase()
         .slice(0, 2)
     : user?.email?.[0]?.toUpperCase() || "U";
+
+  const handleStartEdit = (e, chat) => {
+    e.stopPropagation();
+    setEditingChatId(chat.id);
+    setEditingTitle(chat.title || "New conversation");
+  };
+
+  const handleSaveEdit = (e, chatId) => {
+    e?.stopPropagation();
+    if (editingTitle.trim() && onRenameChat) {
+      onRenameChat(chatId, editingTitle.trim());
+    }
+    setEditingChatId(null);
+    setEditingTitle("");
+  };
+
+  const handleCancelEdit = (e) => {
+    e?.stopPropagation();
+    setEditingChatId(null);
+    setEditingTitle("");
+  };
+
+  const handleDeleteClick = (e, chat) => {
+    e.stopPropagation();
+    setDeletingChat(chat);
+  };
+
+  const handleConfirmDelete = () => {
+    if (deletingChat && onDeleteChat) {
+      onDeleteChat(deletingChat.id);
+    }
+    setDeletingChat(null);
+  };
+
+  const handleCancelDelete = () => {
+    setDeletingChat(null);
+  };
 
   return (
     <aside
@@ -142,42 +184,153 @@ export default function Sidebar({
             </p>
           )
         ) : (
-          <div className="flex flex-col gap-0.5">
-            {chats.map((chat) => (
-              <button
-                key={chat.id}
-                onClick={() => onSelectChat(chat.id)}
-                className={`w-full rounded-lg text-left text-sm transition-colors ${
-                  collapsed
-                    ? "flex items-center justify-center px-0 py-2"
-                    : "truncate px-3 py-2"
-                } ${
-                  activeChatId === chat.id
-                    ? "bg-surface-hover text-foreground"
-                    : "text-text-secondary hover:bg-surface-hover hover:text-foreground"
-                }`}
-                title={collapsed ? chat.title : undefined}
-              >
-                {collapsed ? (
-                  <svg
-                    width="16"
-                    height="16"
-                    viewBox="0 0 16 16"
-                    fill="none"
-                    className="shrink-0"
+          <div className="flex flex-col gap-1">
+            {chats.map((chat) => {
+              const isActive = activeChatId === chat.id;
+              const isEditing = editingChatId === chat.id;
+
+              if (collapsed) {
+                return (
+                  <button
+                    key={chat.id}
+                    onClick={() => onSelectChat(chat.id)}
+                    className={`flex h-9 w-full items-center justify-center rounded-lg text-sm transition-colors ${
+                      isActive
+                        ? "bg-surface-hover text-foreground"
+                        : "text-text-secondary hover:bg-surface-hover hover:text-foreground"
+                    }`}
+                    title={chat.title}
                   >
-                    <path
-                      d="M2 3h12M2 8h8M2 13h10"
-                      stroke="currentColor"
-                      strokeWidth="1.5"
-                      strokeLinecap="round"
+                    <svg
+                      width="16"
+                      height="16"
+                      viewBox="0 0 16 16"
+                      fill="none"
+                      className="shrink-0"
+                    >
+                      <path
+                        d="M2 3h12M2 8h8M2 13h10"
+                        stroke="currentColor"
+                        strokeWidth="1.5"
+                        strokeLinecap="round"
+                      />
+                    </svg>
+                  </button>
+                );
+              }
+
+              if (isEditing) {
+                return (
+                  <div
+                    key={chat.id}
+                    className="flex items-center gap-1 rounded-lg bg-surface-hover px-2 py-1"
+                  >
+                    <input
+                      type="text"
+                      value={editingTitle}
+                      onChange={(e) => setEditingTitle(e.target.value)}
+                      onKeyDown={(e) => {
+                        if (e.key === "Enter") handleSaveEdit(e, chat.id);
+                        if (e.key === "Escape") handleCancelEdit(e);
+                      }}
+                      autoFocus
+                      className="w-full bg-transparent px-1 py-0.5 text-sm text-foreground outline-none border-b border-accent"
                     />
-                  </svg>
-                ) : (
-                  chat.title
-                )}
-              </button>
-            ))}
+                    <button
+                      onClick={(e) => handleSaveEdit(e, chat.id)}
+                      className="p-1 text-accent hover:text-accent/80"
+                      title="Save title"
+                    >
+                      <svg width="14" height="14" viewBox="0 0 16 16" fill="none">
+                        <path
+                          d="M3 8l3.5 3.5L13 4.5"
+                          stroke="currentColor"
+                          strokeWidth="1.5"
+                          strokeLinecap="round"
+                          strokeLinejoin="round"
+                        />
+                      </svg>
+                    </button>
+                    <button
+                      onClick={handleCancelEdit}
+                      className="p-1 text-text-tertiary hover:text-foreground"
+                      title="Cancel"
+                    >
+                      <svg width="14" height="14" viewBox="0 0 16 16" fill="none">
+                        <path
+                          d="M4 4l8 8M12 4l-8 8"
+                          stroke="currentColor"
+                          strokeWidth="1.5"
+                          strokeLinecap="round"
+                        />
+                      </svg>
+                    </button>
+                  </div>
+                );
+              }
+
+              return (
+                <div
+                  key={chat.id}
+                  onClick={() => onSelectChat(chat.id)}
+                  className={`group relative flex items-center justify-between rounded-lg px-3 py-2 text-sm transition-colors cursor-pointer ${
+                    isActive
+                      ? "bg-surface-hover text-foreground font-medium"
+                      : "text-text-secondary hover:bg-surface-hover hover:text-foreground"
+                  }`}
+                >
+                  <span className="truncate pr-2">{chat.title || "New conversation"}</span>
+
+                  <div className="flex items-center gap-1 opacity-0 group-hover:opacity-100 transition-opacity">
+                    {/* Edit button */}
+                    <button
+                      onClick={(e) => handleStartEdit(e, chat)}
+                      className="p-1 text-text-tertiary hover:text-accent transition-colors"
+                      title="Rename conversation"
+                    >
+                      <svg
+                        width="14"
+                        height="14"
+                        viewBox="0 0 16 16"
+                        fill="none"
+                        className="shrink-0"
+                      >
+                        <path
+                          d="M11.06 2.56a1.5 1.5 0 012.12 2.12L4.5 13.36 1.5 14.5l1.14-3 8.64-8.94z"
+                          stroke="currentColor"
+                          strokeWidth="1.25"
+                          strokeLinecap="round"
+                          strokeLinejoin="round"
+                        />
+                      </svg>
+                    </button>
+
+                    {/* Delete button */}
+                    <button
+                      onClick={(e) => handleDeleteClick(e, chat)}
+                      className="p-1 text-text-tertiary hover:text-red-400 transition-colors"
+                      title="Delete conversation"
+                    >
+                      <svg
+                        width="14"
+                        height="14"
+                        viewBox="0 0 16 16"
+                        fill="none"
+                        className="shrink-0"
+                      >
+                        <path
+                          d="M2.5 4h11M5.5 4V2.5a1 1 0 011-1h3a1 1 0 011 1V4M12.5 4v9.5a1 1 0 01-1 1h-7a1 1 0 01-1-1V4"
+                          stroke="currentColor"
+                          strokeWidth="1.25"
+                          strokeLinecap="round"
+                          strokeLinejoin="round"
+                        />
+                      </svg>
+                    </button>
+                  </div>
+                </div>
+              );
+            })}
           </div>
         )}
       </div>
@@ -273,6 +426,71 @@ export default function Sidebar({
           </div>
         )}
       </div>
+
+      {/* Delete Confirmation Modal */}
+      {deletingChat && (
+        <div
+          className="fixed inset-0 z-50 flex items-center justify-center bg-black/65 backdrop-blur-sm p-4 animate-in fade-in duration-200"
+          onClick={handleCancelDelete}
+        >
+          <div
+            className="w-full max-w-sm rounded-xl border border-border bg-surface-raised p-6 shadow-2xl space-y-4"
+            onClick={(e) => e.stopPropagation()}
+          >
+            <div className="flex items-center gap-3">
+              <div className="flex h-10 w-10 shrink-0 items-center justify-center rounded-full bg-red-500/15 text-red-400">
+                <svg
+                  width="20"
+                  height="20"
+                  viewBox="0 0 16 16"
+                  fill="none"
+                  stroke="currentColor"
+                  strokeWidth="1.5"
+                >
+                  <path
+                    d="M2.5 4h11M5.5 4V2.5a1 1 0 011-1h3a1 1 0 011 1V4M12.5 4v9.5a1 1 0 01-1 1h-7a1 1 0 01-1-1V4"
+                    strokeLinecap="round"
+                    strokeLinejoin="round"
+                  />
+                </svg>
+              </div>
+              <div>
+                <h3 className="text-base font-semibold text-foreground">
+                  Delete conversation?
+                </h3>
+                <p className="text-xs text-text-tertiary">
+                  This action cannot be undone.
+                </p>
+              </div>
+            </div>
+
+            <p className="text-sm text-text-secondary leading-relaxed">
+              Are you sure you want to delete{" "}
+              <span className="font-medium text-foreground">
+                "{deletingChat.title || "New conversation"}"
+              </span>
+              ? All messages and associated documents will be permanently removed.
+            </p>
+
+            <div className="flex justify-end gap-2 pt-2">
+              <button
+                type="button"
+                onClick={handleCancelDelete}
+                className="rounded-lg border border-border px-4 py-2 text-sm text-text-secondary transition-colors hover:bg-surface-hover hover:text-foreground cursor-pointer"
+              >
+                Cancel
+              </button>
+              <button
+                type="button"
+                onClick={handleConfirmDelete}
+                className="rounded-lg bg-red-500/90 hover:bg-red-600 px-4 py-2 text-sm font-medium text-white transition-colors cursor-pointer"
+              >
+                Delete
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
     </aside>
   );
 }

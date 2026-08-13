@@ -12,11 +12,13 @@ export const authConfig = {
     Google({
       clientId: process.env.GOOGLE_CLIENT_ID,
       clientSecret: process.env.GOOGLE_CLIENT_SECRET,
+      allowDangerousEmailAccountLinking: true,
     }),
 
     Resend({
       apiKey: process.env.AUTH_RESEND_KEY,
       from: process.env.AUTH_EMAIL_FROM || "onboarding@resend.dev",
+      allowDangerousEmailAccountLinking: true,
     }),
   ],
 
