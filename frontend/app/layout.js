@@ -1,4 +1,5 @@
 import { Geist, Geist_Mono } from "next/font/google";
+import SessionProvider from "./components/SessionProvider";
 import "./globals.css";
 
 const geistSans = Geist({
@@ -24,7 +25,7 @@ export default function RootLayout({ children }) {
       className={`${geistSans.variable} ${geistMono.variable} dark antialiased`}
     >
       <body className="min-h-dvh flex flex-col bg-background text-foreground">
-        {children}
+        <SessionProvider>{children}</SessionProvider>
       </body>
     </html>
   );

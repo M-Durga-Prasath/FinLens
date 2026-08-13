@@ -1,9 +1,12 @@
 "use client";
 
 import Link from "next/link";
+import { useSession } from "next-auth/react";
 import ShapeGrid from "./components/ShapeGrid";
 
 export default function Home() {
+  const { data: session } = useSession();
+
   return (
     <div className="relative flex flex-1 flex-col items-center justify-center overflow-hidden">
       {/* ShapeGrid Background */}
@@ -152,7 +155,7 @@ export default function Home() {
 
         {/* CTA */}
         <Link
-          href="/chat"
+          href={session ? "/chat" : "/auth/signin"}
           className="group flex items-center gap-2 rounded-lg bg-accent px-7 py-3.5 text-sm font-semibold text-background hover:bg-accent-dim hover:shadow-lg hover:shadow-accent/20"
         >
           Start a conversation
