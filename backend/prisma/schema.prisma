@@ -38,7 +38,6 @@ model User {
   emailVerified DateTime? @map("email_verified")
   image         String?
   name          String?
-  googleId      String?   @unique @map("google_id")
   createdAt     DateTime  @default(now()) @map("created_at")
 
   account   Account[]
