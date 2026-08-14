@@ -155,7 +155,7 @@ export default function Home() {
 
         {/* CTA */}
         <Link
-          href={session ? "/chat" : "/auth/signin"}
+          href="/chat"
           className="group flex items-center gap-2 rounded-lg bg-accent px-7 py-3.5 text-sm font-semibold text-background hover:bg-accent-dim hover:shadow-lg hover:shadow-accent/20"
         >
           Start a conversation
