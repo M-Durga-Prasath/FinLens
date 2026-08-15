@@ -176,6 +176,19 @@ export default function Home() {
           </svg>
         </Link>
       </main>
+
+      {/* Footer */}
+      <footer className="relative z-10 pb-8 text-center text-xs text-text-secondary">
+        Made with ❤️ by{" "}
+        <a
+          href="https://github.com/M-Durga-Prasath/FinLens"
+          target="_blank"
+          rel="noopener noreferrer"
+          className="font-medium text-accent transition-colors hover:underline"
+        >
+          M Durga Prasath
+        </a>
+      </footer>
     </div>
   );
 }
