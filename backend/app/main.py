@@ -1,11 +1,21 @@
+from contextlib import asynccontextmanager
 from fastapi import FastAPI
-
+from app.db.database import connect_db, close_db
 from app.api.upload import router as upload_router
 
-app = FastAPI(
-    title="Finex backend"
-)
 
+@asynccontextmanager
+async def lifespan(app: FastAPI):
+    await connect_db()
+    
+    yield
+    
+    await close_db()
+
+app = FastAPI(
+    title="Finex backend",
+    lifespan=lifespan
+)
 
 app.include_router(upload_router)
 
