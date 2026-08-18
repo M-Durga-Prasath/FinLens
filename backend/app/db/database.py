@@ -6,13 +6,13 @@ load_dotenv()
 
 db_url = os.getenv("DATABASE_URL")
 
-if not db_url:
-    raise RuntimeError("DB Url not set. Check Env")
-
-_pool = asyncpg.Pool | None = None
+_pool: asyncpg.Pool | None = None
 
 async def connect_db():
     global _pool
+
+    if not db_url:
+        raise RuntimeError("DB Url not set. Check Env")
 
     if _pool is None:
         _pool = await asyncpg.create_pool(
