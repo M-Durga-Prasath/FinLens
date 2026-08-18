@@ -1,9 +1,13 @@
+from functools import lru_cache
+
 from sentence_transformers import SentenceTransformer
-from app.schemas.utils import EmbeddedChunk, Chunk
+
+from app.schemas.utils import Chunk, EmbeddedChunk
 
 
-
-model = SentenceTransformer("all-MiniLM-L6-v2")
+@lru_cache(maxsize=1)
+def get_model() -> SentenceTransformer:
+    return SentenceTransformer("all-MiniLM-L6-v2")
 
 
 def embed_chunks(chunks:  list[Chunk]) -> list[EmbeddedChunk]:
@@ -12,7 +16,7 @@ def embed_chunks(chunks:  list[Chunk]) -> list[EmbeddedChunk]:
     
     texts = [i.content for i in chunks]
     
-    embeddings = model.encode(
+    embeddings = get_model().encode(
         texts,
         batch_size=32,
         normalize_embeddings=True
