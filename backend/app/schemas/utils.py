@@ -1,4 +1,4 @@
-from pydantic import BaseModel
+from pydantic import BaseModel, Field
 from uuid import UUID
 
 
@@ -26,4 +26,20 @@ class UploadResponse(BaseModel):
     # embedded_chunks: list[EmbeddedChunk]
     status: str
    
+class RetrievalRequest(BaseModel):
+    query: str
+    document_id: UUID
+    top_k: int = Field(default=5, ge=1, le=20)
     
+class RetrievedChunk(BaseModel):
+    id: UUID
+    content: str
+    page_number: int | None
+    chunk_index: int
+    token_count: int
+    similarity: float
+
+
+class RetrievalResponse(BaseModel):
+    query: str
+    results: list[RetrievedChunk]

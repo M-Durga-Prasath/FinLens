@@ -2,6 +2,7 @@ from contextlib import asynccontextmanager
 from fastapi import FastAPI
 from app.db.database import connect_db, close_db
 from app.api.upload import router as upload_router
+from app.api.retrive import router as retrival_router
 
 
 @asynccontextmanager
@@ -18,6 +19,7 @@ app = FastAPI(
 )
 
 app.include_router(upload_router)
+app.include_router(retrival_router)
 
 @app.get("/")
 def read_root():
