@@ -7,7 +7,7 @@ from app.services.embedding import get_model
 async def retrieve_chunks(
     query: str,
     session_id: UUID,
-    top_k: 5,
+    top_k: int = 5,
 ):
     if not query.strip():
         return []
@@ -32,6 +32,7 @@ async def retrieve_chunks(
         FROM chunks c
         INNER JOIN documents d ON d.id = c."documentId"
         WHERE d."sessionId" = $2
+            AND d."status" = 'READY'
         ORDER BY c.embedding <=> $1::vector
         LIMIT $3
         """,
