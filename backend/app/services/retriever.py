@@ -6,7 +6,7 @@ from app.services.embedding import get_model
 
 async def retrieve_chunks(
     query: str,
-    document_id: UUID,
+    session_id: UUID,
     top_k: 5,
 ):
     if not query.strip():
@@ -23,19 +23,20 @@ async def retrieve_chunks(
     rows = await db.fetch(
         """
         SELECT 
-            id, 
-            content, 
-            "pageNumber", 
-            "chunkIndex",
-            "tokenCount",
-            1-(embedding <=> $1::vector) AS similarity
-        FROM chunks
-        WHERE "documentId" = $2
-        ORDER BY embedding <=> $1::vector
+            c.id, 
+            c.content, 
+            c."pageNumber", 
+            c."chunkIndex",
+            c."tokenCount",
+            1 - (c.embedding <=> $1::vector) AS similarity
+        FROM chunks c
+        INNER JOIN documents d ON d.id = c."documentId"
+        WHERE d."sessionId" = $2
+        ORDER BY c.embedding <=> $1::vector
         LIMIT $3
         """,
         embedding_string,
-        document_id,
+        session_id,
         top_k,
     )
 

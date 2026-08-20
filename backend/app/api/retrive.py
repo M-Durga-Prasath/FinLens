@@ -19,7 +19,7 @@ async def retrieve(request: RetrievalRequest):
 
     results = await retrieve_chunks(
         query=request.query,
-        document_id=request.document_id,
+        session_id=request.session_id,
         top_k=request.top_k,
     )
 

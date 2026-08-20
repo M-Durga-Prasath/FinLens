@@ -8,7 +8,7 @@ import app.main as main_module
 import app.services.retriever as retriever_service
 
 
-TEST_DOCUMENT_ID = UUID("44444444-4444-4444-4444-444444444444")
+TEST_SESSION_ID = UUID("44444444-4444-4444-4444-444444444444")
 
 
 async def _noop_async():
@@ -22,6 +22,7 @@ class FakeModel:
 
 class FakeDB:
     async def fetch(self, *args, **kwargs):
+        assert args[2] == TEST_SESSION_ID
         return [
             {
                 "id": UUID("55555555-5555-5555-5555-555555555555"),
@@ -45,14 +46,14 @@ def test_retrieve_api_returns_results(monkeypatch):
     monkeypatch.setattr(retriever_service, "get_model", lambda: FakeModel())
 
     with TestClient(app) as client:
-        response = client.post(
-            "/retrieve/",
-            json={
-                "query": "revenue",
-                "document_id": str(TEST_DOCUMENT_ID),
-                "top_k": 5,
-            },
-        )
+            response = client.post(
+                "/retrieve/",
+                json={
+                    "query": "revenue",
+                    "session_id": str(TEST_SESSION_ID),
+                    "top_k": 5,
+                },
+            )
 
     assert response.status_code == 200
     body = response.json()
