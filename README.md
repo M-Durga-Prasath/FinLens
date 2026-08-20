@@ -56,7 +56,7 @@ graph TD
 - **Reranking**: Transformer-based Cross-Encoder
 - **PDF & Document Processing**: PyMuPDF (`fitz`), `python-docx`, BeautifulSoup4
 - **Chunking**: `langchain-text-splitters`, `tiktoken`
-- **LLM Integrations**: Groq, OpenAI, Google Gemini
+- **LLM Integrations**: Groq, OpenAI, Google Gemini (any one model)
 - **Database & ORM**: PostgreSQL with `pgvector` extension, Prisma ORM (`prisma-client-py` / `asyncpg`)
 
 ### **Frontend**
@@ -111,6 +111,7 @@ Ensure you have the following installed on your machine:
 2. Set your `DATABASE_URL` in the environment file:
    ```env
    DATABASE_URL="postgresql://postgres:password@localhost:5432/financerag"
+   or ur hosted Db 
    ```
 
 ---
