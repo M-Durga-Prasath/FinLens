@@ -5,7 +5,8 @@ from app.schemas.utils import (
     RetrievalResponse,
     RetrievedChunk,
 )
-from app.services.retriever import retrieve_chunks
+
+from app.services.hybird_retrival import retrieve_hybrid_chunks
 
 
 router = APIRouter(
@@ -17,7 +18,7 @@ router = APIRouter(
 @router.post("/", response_model=RetrievalResponse)
 async def retrieve(request: RetrievalRequest):
 
-    results = await retrieve_chunks(
+    results = await retrieve_hybrid_chunks(
         query=request.query,
         session_id=request.session_id,
         top_k=request.top_k,

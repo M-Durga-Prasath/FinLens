@@ -4,7 +4,7 @@ from app.db.database import get_db
 from app.services.embedding import get_model
 
 
-async def retrieve_chunks(
+async def retrieve_dense_chunks(
     query: str,
     session_id: UUID,
     top_k: int = 5,

@@ -38,6 +38,7 @@ class RetrievedChunk(BaseModel):
     chunk_index: int
     token_count: int
     similarity: float
+    rrf_score: float | None = None
 
 
 class RetrievalResponse(BaseModel):

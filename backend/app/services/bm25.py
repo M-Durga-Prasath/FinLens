@@ -40,7 +40,7 @@ class BM25Index:
         }
 
     def score(self, query_tokens: Iterable[str]) -> list[float]:
-        query_terms = list(query_tokens)
+        query_terms = list(dict.fromkeys(query_tokens))
         if not query_terms or self.doc_count == 0:
             return [0.0] * self.doc_count
 
@@ -78,12 +78,15 @@ def rank_chunks_by_bm25(
     scores = index.score(tokenize_text(query))
 
     ranked = sorted(
-        enumerate(zip(chunks, scores)),
-        key=lambda item: (-item[1][1], item[0]),
+        (
+            (index, chunk, score)
+            for index, (chunk, score) in enumerate(zip(chunks, scores))
+        ),
+        key=lambda item: (-item[2], item[0]),
     )[:top_k]
 
     results = []
-    for _, (chunk, score) in ranked:
+    for _, chunk, score in ranked:
         results.append(
             {
                 "id": chunk["id"],
@@ -98,7 +101,7 @@ def rank_chunks_by_bm25(
     return results
 
 
-async def retrieve_chunks(
+async def retrieve_bm25_chunks(
     query: str,
     session_id: UUID,
     top_k: int = 5,
