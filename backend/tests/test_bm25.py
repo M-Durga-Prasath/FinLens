@@ -90,7 +90,7 @@ def test_retrieve_chunks_ranks_db_results(monkeypatch):
     import asyncio
 
     results = asyncio.run(
-        bm25_service.retrieve_chunks(
+        bm25_service.retrieve_bm25_chunks(
             query="revenue",
             session_id=TEST_SESSION_ID,
             top_k=5,
