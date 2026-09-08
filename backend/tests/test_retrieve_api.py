@@ -26,6 +26,8 @@ def test_retrieve_api_returns_results(monkeypatch):
             {
                 "id": UUID("55555555-5555-5555-5555-555555555555"),
                 "content": "Revenue increased significantly.",
+                "document_id": UUID("aaaaaaaa-aaaa-aaaa-aaaa-aaaaaaaaaaaa"),
+                "document_filename": "annual_report.pdf",
                 "page_number": 1,
                 "chunk_index": 1,
                 "token_count": 4,
@@ -55,5 +57,7 @@ def test_retrieve_api_returns_results(monkeypatch):
     assert body["query"] == "revenue"
     assert len(body["results"]) == 1
     assert body["results"][0]["content"] == "Revenue increased significantly."
+    assert body["results"][0]["document_id"] == "aaaaaaaa-aaaa-aaaa-aaaa-aaaaaaaaaaaa"
+    assert body["results"][0]["document_filename"] == "annual_report.pdf"
     assert body["results"][0]["similarity"] == 0.0325
     assert body["results"][0]["rrf_score"] == 0.0325

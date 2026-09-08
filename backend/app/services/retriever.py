@@ -28,6 +28,8 @@ async def retrieve_dense_chunks(
             c."pageNumber", 
             c."chunkIndex",
             c."tokenCount",
+            d.id AS "documentId",
+            d.filename,
             1 - (c.embedding <=> $1::vector) AS similarity
         FROM chunks c
         INNER JOIN documents d ON d.id = c."documentId"
@@ -45,6 +47,8 @@ async def retrieve_dense_chunks(
         {
             "id": row["id"],
             "content": row["content"],
+            "document_id": row["documentId"],
+            "document_filename": row["filename"],
             "page_number": row["pageNumber"],
             "chunk_index": row["chunkIndex"],
             "token_count": row["tokenCount"],

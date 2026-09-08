@@ -1,14 +1,19 @@
-from uuid import uuid4
+from uuid import UUID, uuid4
 
 import pytest
 
 from app.services import reranker
+
+TEST_DOC_ID = UUID("aaaaaaaa-aaaa-aaaa-aaaa-aaaaaaaaaaaa")
+TEST_DOC_FILENAME = "annual_report.pdf"
 
 
 def make_chunk(chunk_id: str, content: str) -> dict:
     return {
         "id": chunk_id,
         "content": content,
+        "document_id": TEST_DOC_ID,
+        "document_filename": TEST_DOC_FILENAME,
         "page_number": 1,
         "chunk_index": 0,
         "token_count": 10,
@@ -70,6 +75,8 @@ def test_rerank_chunks_orders_by_reranker_score(monkeypatch):
 
     assert results[0]["reranker_score"] == 10.0
     assert results[0]["similarity"] == 10.0
+    assert results[0]["document_id"] == TEST_DOC_ID
+    assert results[0]["document_filename"] == TEST_DOC_FILENAME
 
 
 def test_rerank_chunks_respects_top_k(monkeypatch):
@@ -176,5 +183,7 @@ async def test_retrieve_and_rerank(monkeypatch):
 
     assert results[0]["id"] == "chunk-2"
     assert results[0]["reranker_score"] == 10.0
+    assert results[0]["document_id"] == TEST_DOC_ID
+    assert results[0]["document_filename"] == TEST_DOC_FILENAME
 
     assert results[1]["id"] == "chunk-3"

@@ -34,9 +34,11 @@ class RetrievalRequest(BaseModel):
 class RetrievedChunk(BaseModel):
     id: UUID
     content: str
+    document_id: UUID
+    document_filename: str
     page_number: int | None
     chunk_index: int
-    token_count: int
+    token_count: int | None
     similarity: float
     rrf_score: float | None = None
 

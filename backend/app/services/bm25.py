@@ -91,6 +91,8 @@ def rank_chunks_by_bm25(
             {
                 "id": chunk["id"],
                 "content": chunk["content"],
+                "document_id": chunk["document_id"],
+                "document_filename": chunk["document_filename"],
                 "page_number": chunk.get("page_number"),
                 "chunk_index": chunk["chunk_index"],
                 "token_count": chunk["token_count"],
@@ -121,7 +123,9 @@ async def retrieve_bm25_chunks(
             c.content,
             c."pageNumber",
             c."chunkIndex",
-            c."tokenCount"
+            c."tokenCount",
+            d.id AS "documentId",
+            d.filename
         FROM chunks c
         INNER JOIN documents d ON d.id = c."documentId"
         WHERE d."sessionId" = $1
@@ -135,6 +139,8 @@ async def retrieve_bm25_chunks(
         {
             "id": row["id"],
             "content": row["content"],
+            "document_id": row["documentId"],
+            "document_filename": row["filename"],
             "page_number": row["pageNumber"],
             "chunk_index": row["chunkIndex"],
             "token_count": row["tokenCount"],

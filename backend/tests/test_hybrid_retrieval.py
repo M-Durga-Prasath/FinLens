@@ -9,12 +9,16 @@ CHUNK_A = UUID("11111111-1111-1111-1111-111111111111")
 CHUNK_B = UUID("22222222-2222-2222-2222-222222222222")
 CHUNK_C = UUID("33333333-3333-3333-3333-333333333333")
 TEST_SESSION_ID = UUID("44444444-4444-4444-4444-444444444444")
+TEST_DOC_ID = UUID("aaaaaaaa-aaaa-aaaa-aaaa-aaaaaaaaaaaa")
+TEST_DOC_FILENAME = "annual_report.pdf"
 
 
 def _chunk(chunk_id, content, similarity=0.9):
     return {
         "id": chunk_id,
         "content": content,
+        "document_id": TEST_DOC_ID,
+        "document_filename": TEST_DOC_FILENAME,
         "page_number": 1,
         "chunk_index": 1,
         "token_count": 4,
@@ -40,6 +44,8 @@ def test_reciprocal_rank_fusion_prefers_chunk_returned_by_both_retrievers():
     assert [result["id"] for result in results] == [CHUNK_B, CHUNK_A, CHUNK_C]
     assert results[0]["rrf_score"] == pytest.approx(1 / 62 + 1 / 61)
     assert results[0]["similarity"] == results[0]["rrf_score"]
+    assert results[0]["document_id"] == TEST_DOC_ID
+    assert results[0]["document_filename"] == TEST_DOC_FILENAME
 
 
 @pytest.mark.asyncio
@@ -72,3 +78,5 @@ async def test_retrieve_hybrid_chunks_fuses_dense_and_bm25(monkeypatch):
     )
 
     assert [result["id"] for result in results] == [CHUNK_B, CHUNK_A]
+    assert results[0]["document_id"] == TEST_DOC_ID
+    assert results[0]["document_filename"] == TEST_DOC_FILENAME
