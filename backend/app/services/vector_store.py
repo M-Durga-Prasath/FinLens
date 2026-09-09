@@ -17,7 +17,7 @@ async def create_document(
     user_id: UUID,
     session_id: UUID,
 ):
-    db = await get_db
+    db = await get_db()
     document_id = await db.fetchval(
         """
         INSERT INTO documents (
