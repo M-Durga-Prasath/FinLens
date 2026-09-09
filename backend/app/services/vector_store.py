@@ -21,6 +21,7 @@ async def create_document(
     document_id = await db.fetchval(
         """
         INSERT INTO documents (
+            id,
             filename,
             filetype,
             status,
@@ -28,6 +29,7 @@ async def create_document(
             "sessionId"
         )
         VALUES (
+            gen_random_uuid(),
             $1,
             $2,
             'PROCESSING',
@@ -65,6 +67,7 @@ async def store_chunks(
                 await connection.execute(
                     """
                     INSERT INTO chunks (
+                        id,
                         content,
                         "chunkIndex",
                         "pageNumber",
@@ -73,6 +76,7 @@ async def store_chunks(
                         "documentId"
                     )
                     VALUES (
+                        gen_random_uuid(),
                         $1,
                         $2,
                         $3,

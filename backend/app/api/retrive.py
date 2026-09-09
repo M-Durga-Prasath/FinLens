@@ -6,7 +6,7 @@ from app.schemas.utils import (
     RetrievedChunk,
 )
 
-from app.services.hybird_retrival import retrieve_hybrid_chunks
+from app.services.reranker import retrieve_and_rerank
 
 
 router = APIRouter(
@@ -18,7 +18,7 @@ router = APIRouter(
 @router.post("/", response_model=RetrievalResponse)
 async def retrieve(request: RetrievalRequest):
 
-    results = await retrieve_hybrid_chunks(
+    results = await retrieve_and_rerank(
         query=request.query,
         session_id=request.session_id,
         top_k=request.top_k,
