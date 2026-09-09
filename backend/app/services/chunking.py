@@ -2,8 +2,8 @@ from langchain_text_splitters import RecursiveCharacterTextSplitter
 import tiktoken
 from app.schemas.utils import Chunk, ExtractedPage
 
-chunk_size = 500
-chunk_overlap = 50
+chunk_size = 1200
+chunk_overlap = 200
 
 Encoding = tiktoken.get_encoding("cl100k_base")
 
