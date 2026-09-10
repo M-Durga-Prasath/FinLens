@@ -1,0 +1,818 @@
+[
+  {
+    "question": "For what quarterly period ended is the Form 10-Q filed by Apple Inc.?",
+    "ground_truth": "The quarterly period ended June 27, 2026.",
+    "relevant_chunk_ids": [
+      "3a78cf6f-173c-425e-9888-9d5a2616e68f"
+    ],
+    "page_number": 1
+  },
+  {
+    "question": "What is the interest rate and due year for The Nasdaq Stock Market LLC notes that mature in 2031?",
+    "ground_truth": "0.500% Notes due 2031",
+    "relevant_chunk_ids": [
+      "184bfaf0-8f36-48e5-a829-361475eb8ee0"
+    ],
+    "page_number": 1
+  },
+  {
+    "question": "How many shares of common stock were issued and outstanding as of July 17, 2026?",
+    "ground_truth": "14,594,180,000 shares",
+    "relevant_chunk_ids": [
+      "0fba310e-d37c-4ab6-8d5c-2251d2573924"
+    ],
+    "page_number": 2
+  },
+  {
+    "question": "What was Apple Inc.'s net income for the period presented in the Q3 2026 Form 10-Q chunk?",
+    "ground_truth": "$29,789, $23,434, $101,464, and $84,544",
+    "relevant_chunk_ids": [
+      "9ae5c9b6-fa33-40c9-af46-4ee8d121eaef"
+    ],
+    "page_number": 4
+  },
+  {
+    "question": "What was the total comprehensive income for the periods presented in the Apple Inc. Q3 2026 Form 10-Q?",
+    "ground_truth": "$30,656, $23,428, $102,527, and $85,347",
+    "relevant_chunk_ids": [
+      "a4fdf0f6-87a3-4796-87a6-1b49249af9fc"
+    ],
+    "page_number": 5
+  },
+  {
+    "question": "What were Apple Inc.'s total current assets as of June 27, 2026?",
+    "ground_truth": "$149,818 million",
+    "relevant_chunk_ids": [
+      "455133bf-9ee7-4c9e-8371-0d9c2e329500"
+    ],
+    "page_number": 6
+  },
+  {
+    "question": "What was the total liabilities amount for Apple Inc. in Q3 2026?",
+    "ground_truth": "275,746 and 285,508",
+    "relevant_chunk_ids": [
+      "af9e9f46-e38c-486a-afb4-2e91fc5423cf"
+    ],
+    "page_number": 6
+  },
+  {
+    "question": "What was the net income for Apple Inc. for the three months ended June 27, 2026?",
+    "ground_truth": "$29,789 million",
+    "relevant_chunk_ids": [
+      "c3a225b9-cb3c-481b-af71-7756a1ae7eff"
+    ],
+    "page_number": 7
+  },
+  {
+    "question": "What is the total shareholders' equity ending balance for Apple Inc. in Q3 2026?",
+    "ground_truth": "$107,520 (and $65,830 as shown across the columns)",
+    "relevant_chunk_ids": [
+      "0d0e400d-ba26-4daf-af71-d279081f2a06"
+    ],
+    "page_number": 7
+  },
+  {
+    "question": "What was Apple Inc.'s net income for the nine months ended June 27, 2026?",
+    "ground_truth": "101,464 million",
+    "relevant_chunk_ids": [
+      "26ce3b87-5ad4-43a5-9cde-5080e036bd42"
+    ],
+    "page_number": 8
+  },
+  {
+    "question": "What was the amount of cash paid for income taxes, net, as reported in the supplemental cash flow disclosure for Apple Inc. in Q3 2026?",
+    "ground_truth": "The cash paid for income taxes, net, was $26,555 (in one period) and $37,332 (in the comparative period).",
+    "relevant_chunk_ids": [
+      "b26459e7-8cb7-41c2-a41d-06a66e4b500b"
+    ],
+    "page_number": 8
+  },
+  {
+    "question": "Whose accounts are included in Apple's condensed consolidated financial statements?",
+    "ground_truth": "The accounts of Apple Inc. and its wholly owned subsidiaries (collectively “Apple” or the “Company”).",
+    "relevant_chunk_ids": [
+      "4334bc61-91b2-46cc-8d17-93d8e9ab11c8"
+    ],
+    "page_number": 9
+  },
+  {
+    "question": "How many weeks do the Company's fiscal years 2026 and 2025 each span?",
+    "ground_truth": "52 weeks each",
+    "relevant_chunk_ids": [
+      "7f296db4-8835-400a-a937-43705cf208bc"
+    ],
+    "page_number": 9
+  },
+  {
+    "question": "What were the total net sales for the periods presented in the document?",
+    "ground_truth": "$109,417, $94,036, $364,357, and $313,695",
+    "relevant_chunk_ids": [
+      "3e494359-0093-4bb9-819d-a309635846cc"
+    ],
+    "page_number": 9
+  },
+  {
+    "question": "What was the net income for the three months ended June 27, 2026?",
+    "ground_truth": "$29,789 million",
+    "relevant_chunk_ids": [
+      "84bf7836-dbda-4f5c-b1b3-30cc8e7e2df3"
+    ],
+    "page_number": 10
+  },
+  {
+    "question": "What is the adjusted cost of money market funds as of June 27, 2026?",
+    "ground_truth": "7,840",
+    "relevant_chunk_ids": [
+      "dd1440f5-b938-4e6f-beb4-7d8f043e418a"
+    ],
+    "page_number": 10
+  },
+  {
+    "question": "What is the subtotal amount for mortgage- and asset-backed securities?",
+    "ground_truth": "24,828",
+    "relevant_chunk_ids": [
+      "3b68467e-a977-44dd-af4c-93f9f3862201"
+    ],
+    "page_number": 10
+  },
+  {
+    "question": "What is the adjusted cost for U.S. Treasury securities as of September 27, 2025?",
+    "ground_truth": "16,074",
+    "relevant_chunk_ids": [
+      "63742b2c-d222-44c9-b5a6-18475f46d8f2"
+    ],
+    "page_number": 11
+  },
+  {
+    "question": "As of June 27, 2026, what percentage of the Company's non-current marketable debt securities other than mortgage- and asset-backed securities had maturities between 1 and 5 years?",
+    "ground_truth": "81%",
+    "relevant_chunk_ids": [
+      "7b6ab0bf-2c4d-488c-8120-1fdcc8249e64"
+    ],
+    "page_number": 11
+  },
+  {
+    "question": "Typically, for how long does the Company generally hedge portions of its forecasted foreign currency exposure associated with revenue and inventory purchases?",
+    "ground_truth": "Typically for up to 12 months.",
+    "relevant_chunk_ids": [
+      "90bfa032-196e-45f4-b28b-171b8588229c"
+    ],
+    "page_number": 11
+  },
+  {
+    "question": "As of June 27, 2026, what is the maximum length of time over which the Company is hedging its exposure to the variability in future cash flows for term debt–related foreign currency transactions?",
+    "ground_truth": "16 years",
+    "relevant_chunk_ids": [
+      "e9a079cd-96b5-4ce3-aafc-00862443af3d"
+    ],
+    "page_number": 11
+  },
+  {
+    "question": "What were the notional amounts of the Company's foreign exchange contracts designated as accounting hedges as of June 27, 2026 and September 27, 2025?",
+    "ground_truth": "As of June 27, 2026, the notional amount was $61,313 million, and as of September 27, 2025, it was $62,647 million.",
+    "relevant_chunk_ids": [
+      "deac14b0-6607-480d-ba0f-a330e59de389"
+    ],
+    "page_number": 12
+  },
+  {
+    "question": "As of June 27, 2026, what percentages of total vendor non-trade receivables were accounted for by the two vendors that individually represented 10% or more?",
+    "ground_truth": "47% and 22%",
+    "relevant_chunk_ids": [
+      "7897450d-d31b-42b1-9aab-4621e94f9e90"
+    ],
+    "page_number": 12
+  },
+  {
+    "question": "What were the inventory components for the Company as of June 27, 2026, in millions?",
+    "ground_truth": "$7,645 million",
+    "relevant_chunk_ids": [
+      "74208649-b5dc-4879-a7e2-f359b70dde6e"
+    ],
+    "page_number": 12
+  },
+  {
+    "question": "What was the net total of property, plant, and equipment for Apple Inc. as of June 27, 2026?",
+    "ground_truth": "$51,431",
+    "relevant_chunk_ids": [
+      "c89be832-e373-4fd9-a773-312f2de7bba8"
+    ],
+    "page_number": 12
+  },
+  {
+    "question": "What was the amount of commercial paper outstanding as of June 27, 2026, and September 27, 2025?",
+    "ground_truth": "As of June 27, 2026 and September 27, 2025, the Company had $2.0 billion and $8.0 billion of commercial paper outstanding, respectively.",
+    "relevant_chunk_ids": [
+      "26bca4d8-07a5-48be-82a4-489011d728e3"
+    ],
+    "page_number": 13
+  },
+  {
+    "question": "How many shares of common stock did the Company repurchase during the nine months ended June 27, 2026, and for what total amount?",
+    "ground_truth": "During the nine months ended June 27, 2026, the Company repurchased 215 million shares of its common stock for $61.8 billion.",
+    "relevant_chunk_ids": [
+      "769bd514-1810-4cfb-88c3-bb41d47d5407"
+    ],
+    "page_number": 13
+  },
+  {
+    "question": "What was the weighted-average grant-date fair value per restricted stock unit (RSU) for RSUs granted during the nine months ended June 27, 2026?",
+    "ground_truth": "$258.16",
+    "relevant_chunk_ids": [
+      "ab03ab87-c589-46d2-8ccf-dd8c114ffb4f"
+    ],
+    "page_number": 14
+  },
+  {
+    "question": "What was the total vesting-date fair value of RSUs for the three months ended June 27, 2026, and June 28, 2025?",
+    "ground_truth": "The total vesting-date fair value of RSUs was $8.9 billion for the three months ended June 27, 2026, and $7.0 billion for the three months ended June 28, 2025.",
+    "relevant_chunk_ids": [
+      "0e70258c-b4e6-486b-810d-9d2f5ce0dda9"
+    ],
+    "page_number": 14
+  },
+  {
+    "question": "What is the expected weighted-average period over which the Company expects to recognize items, and what do the Company's unconditional purchase obligations primarily consist of?",
+    "ground_truth": "The Company expects to recognize over a weighted-average period of 2.7 years. The Company's unconditional purchase obligations primarily consist of supplier arrangements, licensed intellectual property and content, and distribution rights.",
+    "relevant_chunk_ids": [
+      "90a5609d-87ba-4268-a176-acd716108c77"
+    ],
+    "page_number": 14
+  },
+  {
+    "question": "What is the total amount for contingencies listed in the document?",
+    "ground_truth": "$27,628",
+    "relevant_chunk_ids": [
+      "a4c6f0fe-52e6-4323-bf9d-af7f6a52ceb0"
+    ],
+    "page_number": 14
+  },
+  {
+    "question": "What was the total net sales for the three months ended June 27, 2026?",
+    "ground_truth": "$109,417 million",
+    "relevant_chunk_ids": [
+      "45c186d8-229d-46e2-95ef-81f637c91ff5"
+    ],
+    "page_number": 15
+  },
+  {
+    "question": "What was the total operating income for the nine months ended June 27, 2026?",
+    "ground_truth": "$122,432",
+    "relevant_chunk_ids": [
+      "9cd3e6cb-72eb-4319-8d7c-02ce3338efb2"
+    ],
+    "page_number": 15
+  },
+  {
+    "question": "What was Apple Inc.'s operating income or loss for the period reported in the Q3 2026 Form 10-Q chunk?",
+    "ground_truth": "The operating income figures listed are $54,794, $35,424, $20,608, $10,620, $10,813, $(31,636), and $100,623.",
+    "relevant_chunk_ids": [
+      "5db1c580-f46e-4250-b54d-bdaf92c015d2"
+    ],
+    "page_number": 15
+  },
+  {
+    "question": "What act defines the forward-looking statements mentioned in the Form 10-Q?",
+    "ground_truth": "The Private Securities Litigation Reform Act of 1995",
+    "relevant_chunk_ids": [
+      "f949f449-a7e8-4678-8314-a455a73204b4"
+    ],
+    "page_number": 16
+  },
+  {
+    "question": "When do the Company's fiscal years and their associated quarters, months, and periods end?",
+    "ground_truth": "The Company's fiscal years end in September, along with the associated quarters, months, and periods of those fiscal years.",
+    "relevant_chunk_ids": [
+      "c515b38b-ceb4-45b8-91ca-2eb2f7852fb4"
+    ],
+    "page_number": 16
+  },
+  {
+    "question": "Which quarter has the Company historically experienced higher net sales compared to other quarters, and what is the primary reason?",
+    "ground_truth": "The Company has historically experienced higher net sales in its first quarter compared to other quarters in its fiscal year due in part to seasonal holiday demand.",
+    "relevant_chunk_ids": [
+      "d7483646-212c-434a-8a11-f4da7d985b1d"
+    ],
+    "page_number": 16
+  },
+  {
+    "question": "Which operating systems and new features were announced by the Company during the third quarter of 2026?",
+    "ground_truth": "During the third quarter of 2026, the Company announced iOS 27, macOS® 27 Golden Gate, iPadOS® 27, watchOS® 27, visionOS® 27 and tvOS® 27, and introduced Siri AI.",
+    "relevant_chunk_ids": [
+      "23db4f42-158d-41be-b4d7-a37c76fbbef7"
+    ],
+    "page_number": 16
+  },
+  {
+    "question": "What industry supply-demand imbalances does the Company expect to intensify, and what actions might not effectively mitigate their negative impacts?",
+    "ground_truth": "The Company expects industry supply-demand imbalances for components, including advanced semiconductors, storage (NAND) and memory (DRAM) to intensify. Actions such as price increases taken by the Company may not effectively mitigate the negative impacts and may also reduce demand for the Company's products.",
+    "relevant_chunk_ids": [
+      "f13dd161-9c43-4d9f-8d84-8f3c9fdeb221"
+    ],
+    "page_number": 16
+  },
+  {
+    "question": "When were the initial results of the U.S. Department of Commerce investigation under Section 232 published?",
+    "ground_truth": "January 14, 2026",
+    "relevant_chunk_ids": [
+      "18c7a627-4605-405b-8304-8b320fee5570"
+    ],
+    "page_number": 17
+  },
+  {
+    "question": "What was the net sales amount for the Americas segment for the three months ended June 27, 2026, and what was the percentage change compared to the three months ended June 28, 2025?",
+    "ground_truth": "For the three months ended June 27, 2026, net sales for the Americas segment were $45,781 million, representing an 11% increase compared to $41,198 million for the three months ended June 28, 2025.",
+    "relevant_chunk_ids": [
+      "6cd72225-01c9-4c5b-bee5-4fb28424deba"
+    ],
+    "page_number": 17
+  },
+  {
+    "question": "What is the percentage growth shown for Greater China?",
+    "ground_truth": "22%",
+    "relevant_chunk_ids": [
+      "c9c53a08-167c-4ea7-94cc-e34569d0cf1f"
+    ],
+    "page_number": 17
+  },
+  {
+    "question": "What were the total net sales for Apple Inc. in the periods shown in the table?",
+    "ground_truth": "Total net sales were $109,417, $94,036 (up 16%), $364,357, and $313,695 (up 16%).",
+    "relevant_chunk_ids": [
+      "51ea7979-886c-4a9e-a70f-73563768219f"
+    ],
+    "page_number": 17
+  },
+  {
+    "question": "What was the percentage change in iPhone net sales for the three months ended June 27, 2026, compared to the three months ended June 28, 2025?",
+    "ground_truth": "22%",
+    "relevant_chunk_ids": [
+      "5dfe7e85-0502-4b73-becf-613730c4c21a"
+    ],
+    "page_number": 18
+  },
+  {
+    "question": "What was the percentage change for iPad revenue?",
+    "ground_truth": "(6) %",
+    "relevant_chunk_ids": [
+      "d5e80fc6-e5cc-4efe-94da-ead77bba6ff0"
+    ],
+    "page_number": 18
+  },
+  {
+    "question": "What were the primary reasons for the increase in iPhone net sales during the third quarter and first nine months of 2026 compared to the same periods in 2025?",
+    "ground_truth": "iPhone net sales increased during the third quarter and first nine months of 2026 compared to the same periods in 2025 primarily due to higher net sales of Pro models.",
+    "relevant_chunk_ids": [
+      "38409238-1f8a-4a63-b81b-fe42aca4ced4"
+    ],
+    "page_number": 18
+  },
+  {
+    "question": "What primarily drove the increase in Services net sales during the third quarter and first nine months of 2026 compared to 2025?",
+    "ground_truth": "Higher net sales from advertising and cloud services.",
+    "relevant_chunk_ids": [
+      "b2cac723-f268-4f6f-ab10-2f125d77586c"
+    ],
+    "page_number": 18
+  },
+  {
+    "question": "What was the gross margin for Products for the three months ended June 27, 2026?",
+    "ground_truth": "$31,525 million",
+    "relevant_chunk_ids": [
+      "32c4b3a2-fedc-4754-bfcc-d2658b1c8e1e"
+    ],
+    "page_number": 19
+  },
+  {
+    "question": "What factors primarily caused the increase in products gross margin and gross margin percentage during the third quarter and first nine months of 2026 compared to 2025?",
+    "ground_truth": "A different mix of products and tariff refunds, partially offset by higher costs, including memory.",
+    "relevant_chunk_ids": [
+      "71495146-ce82-4e17-8ca6-7fc10501bae6"
+    ],
+    "page_number": 19
+  },
+  {
+    "question": "What does the Company believe will generally happen to its gross margins?",
+    "ground_truth": "The Company believes, in general, gross margins will be subject to volatility and downward pressure.",
+    "relevant_chunk_ids": [
+      "3e579f38-d99e-471a-bb2c-5bb9f9de1695"
+    ],
+    "page_number": 19
+  },
+  {
+    "question": "What were the total operating expenses for the three months ended June 27, 2026, and how much did they change compared to the three months ended June 28, 2025?",
+    "ground_truth": "Total operating expenses for the three months ended June 27, 2026, were $19,075 million, representing a 23% increase compared to the three months ended June 28, 2025.",
+    "relevant_chunk_ids": [
+      "a2abac36-2260-4ec2-9e5e-10ca4d0fd53a"
+    ],
+    "page_number": 20
+  },
+  {
+    "question": "What was the provision for income taxes for the three months ended June 27, 2026, and how did it compare to the three months ended June 28, 2025?",
+    "ground_truth": "For the three months ended June 27, 2026, the provision for income taxes was $6,478 million, compared to $4,597 million for the three months ended June 28, 2025.",
+    "relevant_chunk_ids": [
+      "1bf7acd7-99b7-49de-91b1-15ed88c22f1b"
+    ],
+    "page_number": 20
+  },
+  {
+    "question": "Why was the Company's effective tax rate for the third quarter of 2026 higher compared to the third quarter of 2025?",
+    "ground_truth": "The Company's effective tax rate for the third quarter of 2026 was higher compared to the third quarter of 2025 primarily due to a higher effective tax rate on foreign earnings, partially offset by the impact of changes in unrecognized tax benefits and tax benefits from share-based compensation.",
+    "relevant_chunk_ids": [
+      "9112deb4-d316-43e1-aae4-5625f7415089"
+    ],
+    "page_number": 20
+  },
+  {
+    "question": "What were the Company's total manufacturing purchase obligations as of June 27, 2026, and how much of that amount was payable within 12 months?",
+    "ground_truth": "As of June 27, 2026, the Company had manufacturing purchase obligations of $57.0 billion, with $56.2 billion payable within 12 months.",
+    "relevant_chunk_ids": [
+      "68f21abb-a13b-4204-aadd-27d4db81f526"
+    ],
+    "page_number": 21
+  },
+  {
+    "question": "What was the total amount of other purchase obligations as of June 27, 2026, and how much was payable within 12 months?",
+    "ground_truth": "As of June 27, 2026, the Company had other purchase obligations of $29.3 billion, with $9.2 billion payable within 12 months.",
+    "relevant_chunk_ids": [
+      "aceda588-040d-4145-856f-47c04ee193a0"
+    ],
+    "page_number": 21
+  },
+  {
+    "question": "How much common stock did the Company repurchase during the third quarter of 2026?",
+    "ground_truth": "During the third quarter of 2026, the Company repurchased $25.8 billion of its common stock.",
+    "relevant_chunk_ids": [
+      "f799ca46-5c42-4b8d-9d5f-14a66229bc70"
+    ],
+    "page_number": 21
+  },
+  {
+    "question": "In which quarter and year does the Company plan to adopt ASU 2024-03, and what transition method will it use?",
+    "ground_truth": "The Company will adopt ASU 2024-03 in its fourth quarter of 2028 using a prospective transition method.",
+    "relevant_chunk_ids": [
+      "7dcaf0f4-8c65-4db4-9a08-fd0505eee2c2"
+    ],
+    "page_number": 21
+  },
+  {
+    "question": "When does the Company plan to adopt ASU No. 2023-09, and what transition method will it use?",
+    "ground_truth": "The Company will adopt ASU 2023-09 in its fourth quarter of 2026 using a prospective transition method.",
+    "relevant_chunk_ids": [
+      "24d08a81-8222-4993-badf-c9463ae472ba"
+    ],
+    "page_number": 22
+  },
+  {
+    "question": "Have there been any material changes to the Company's critical accounting estimates or market risk since the 2025 Form 10-K?",
+    "ground_truth": "No, there have been no material changes to the Company's critical accounting estimates since the 2025 Form 10-K, and there have been no material changes to the Company's market risk during the first nine months of 2026.",
+    "relevant_chunk_ids": [
+      "a505e2cf-6680-4e3b-8c18-b7cade17f801"
+    ],
+    "page_number": 22
+  },
+  {
+    "question": "Were there any changes in Apple Inc.'s internal control over financial reporting during the third quarter of 2026 that materially affected or were reasonably likely to materially affect it?",
+    "ground_truth": "No, there were no changes in the Company's internal control over financial reporting during the third quarter of 2026 that have materially affected, or are reasonably likely to materially affect, the Company's internal control over financial reporting.",
+    "relevant_chunk_ids": [
+      "e54ded5e-238d-45be-9412-02a161589f09"
+    ],
+    "page_number": 22
+  },
+  {
+    "question": "On what date did the European Commission announce the €500 million fine against the Company, and what specific cease and desist order was issued with it?",
+    "ground_truth": "On April 23, 2025, the Commission fined the Company €500 million in the Article 5(4) Investigation and issued a cease and desist order requiring the Company to remove technical and commercial restrictions that prevent developers from steering users to alternative distribution channels outside the App Store.",
+    "relevant_chunk_ids": [
+      "966d9034-6764-44e1-957e-1a4207df9885"
+    ],
+    "page_number": 23
+  },
+  {
+    "question": "What is the maximum penalty the Commission can impose on the Company in terms of annual worldwide net sales if it makes a final determination of a violation in the Article 6(4) Investigation?",
+    "ground_truth": "Fines up to 10% of the Company's annual worldwide net sales.",
+    "relevant_chunk_ids": [
+      "9b2d3202-3488-4d40-8657-79ef0262b4ef"
+    ],
+    "page_number": 23
+  },
+  {
+    "question": "Which court issued an injunction finding that certain provisions of the Company's App Review Guidelines violate California's unfair competition law in the Epic Games lawsuit?",
+    "ground_truth": "The U.S. District Court for the Northern District of California (California District Court)",
+    "relevant_chunk_ids": [
+      "21d8728e-b35c-4a04-a6a8-cd2b0dc5c02b"
+    ],
+    "page_number": 23
+  },
+  {
+    "question": "What specific ruling did the Ninth Circuit Court issue on December 11, 2025 regarding the 2025 Injunction?",
+    "ground_truth": "On December 11, 2025, the Ninth Circuit Court issued an order upholding the 2025 Injunction in part and modifying certain aspects to allow the Company to require parity in size, form and placement between the Company’s in-app purchase and any links for consumers to make purchases outside an app.",
+    "relevant_chunk_ids": [
+      "118df5bb-31dc-4867-a5d5-0419eb650e31"
+    ],
+    "page_number": 23
+  },
+  {
+    "question": "On what date did the Supreme Court grant the Company's petition to review the applicable legal standard for civil contempt?",
+    "ground_truth": "June 30, 2026",
+    "relevant_chunk_ids": [
+      "55ca1923-e30b-4ac3-9d52-cc0b6b809537"
+    ],
+    "page_number": 23
+  },
+  {
+    "question": "What could happen to Apple Inc.'s financial condition and operating results if one or more legal matters were resolved against the Company in a reporting period for amounts above management's expectations?",
+    "ground_truth": "The Company's financial condition and operating results for that reporting period could be materially adversely affected.",
+    "relevant_chunk_ids": [
+      "1f3adef1-a9f4-4a4f-9ab1-38edf7461e9c"
+    ],
+    "page_number": 23
+  },
+  {
+    "question": "Where are the Company's risk factors described prior to any changes?",
+    "ground_truth": "Part I, Item 1A of the 2025 Form 10-K and Part II, Item 1A of the Form 10-Q for the quarter ended March 28, 2026.",
+    "relevant_chunk_ids": [
+      "4c314221-ac29-45b6-a249-27c456c4d83c"
+    ],
+    "page_number": 24
+  },
+  {
+    "question": "What specific component types are mentioned as being affected by industry supply-demand imbalances and increasing costs?",
+    "ground_truth": "Advanced semiconductors, storage (NAND), and memory (DRAM).",
+    "relevant_chunk_ids": [
+      "a456a2a3-bb6d-4a74-b125-b66fca9029a7"
+    ],
+    "page_number": 24
+  },
+  {
+    "question": "What issues might the Company experience with new products that utilize custom components available from only one source?",
+    "ground_truth": "Initial capacity constraints may exist until the suppliers' yields have matured or their manufacturing capacities have increased, and the Company may not be able to extend or renew agreements on similar terms, obtain sufficient quantities in a timely manner, or identify alternative sources.",
+    "relevant_chunk_ids": [
+      "bbb08d2b-a88a-4acd-b316-cc4f0256a3c8"
+    ],
+    "page_number": 24
+  },
+  {
+    "question": "What factors have resulted from the substantially increased demand for cloud computing and artificial intelligence infrastructure across the technology industry?",
+    "ground_truth": "Constrained supply, extended lead times, and increasing costs.",
+    "relevant_chunk_ids": [
+      "ab745908-dca0-4d5d-b794-67ed8bd752cb"
+    ],
+    "page_number": 24
+  },
+  {
+    "question": "What does the Company believe customers' decisions to purchase its hardware products depend on in part?",
+    "ground_truth": "The availability of third-party software applications and services.",
+    "relevant_chunk_ids": [
+      "b4f7673a-1af4-4612-b6f8-485362ddae87"
+    ],
+    "page_number": 24
+  },
+  {
+    "question": "What competitor platforms does the Company compare itself to regarding third-party developer support?",
+    "ground_truth": "Android for smartphones and tablets, Windows for personal computers and tablets, and PlayStation, Nintendo and Xbox for gaming platforms.",
+    "relevant_chunk_ids": [
+      "646883a6-57d7-4310-bd49-731d4a68cac7"
+    ],
+    "page_number": 24
+  },
+  {
+    "question": "How can the Company's minority market share in certain markets impact developers' inclination to create or update software for its products?",
+    "ground_truth": "It can make developers less inclined to develop or upgrade software for the Company’s products and more inclined to devote their resources to developing and upgrading software for competitors’ products with larger market share.",
+    "relevant_chunk_ids": [
+      "7f742793-c454-4574-a64f-c968ec4a572d"
+    ],
+    "page_number": 25
+  },
+  {
+    "question": "How might the use of alternative distribution and payment methods by third-party developers affect the Company?",
+    "ground_truth": "The Company may earn a lower commission on such sales, or may not earn a commission at all, which can materially adversely affect the Company’s revenue, gross margin, results of operations, financial condition and stock price.",
+    "relevant_chunk_ids": [
+      "362781ae-b045-4a27-a92c-b1993969f697"
+    ],
+    "page_number": 25
+  },
+  {
+    "question": "What instructions did the Ninth Circuit Court give regarding the injunction on the Company's commission structure?",
+    "ground_truth": "The Ninth Circuit Court has instructed the California District Court to further amend or modify its injunction to allow the Company to charge a commission.",
+    "relevant_chunk_ids": [
+      "214647ec-c6e7-4b08-aa19-2a7991d53473"
+    ],
+    "page_number": 25
+  },
+  {
+    "question": "What are some of the changes the Company has implemented in the EU to comply with the DMA?",
+    "ground_truth": "The Company has implemented changes to iOS, iPadOS, the App Store and Safari® in the EU as it seeks to comply with the DMA, including new business terms and alternative fee structures for iOS and iPadOS apps, alternative methods of distribution for iOS and iPadOS apps, alternative payment processing for apps across the Company’s operating systems, and additional tools and application programming interfaces for developers.",
+    "relevant_chunk_ids": [
+      "d02c139a-5f54-44a1-b2b4-f0eade50a7b3"
+    ],
+    "page_number": 25
+  },
+  {
+    "question": "What feature and product launch or maintenance has been affected in certain jurisdictions due to interoperability and other requirements?",
+    "ground_truth": "Siri AI",
+    "relevant_chunk_ids": [
+      "9173373f-6621-44f6-88aa-b65a724439ac"
+    ],
+    "page_number": 25
+  },
+  {
+    "question": "What type of civil antitrust lawsuits is the Company subject to in the U.S.?",
+    "ground_truth": "The Company is subject to civil antitrust lawsuits in the U.S. alleging monopolization or attempted monopolization in the markets for “performance smartphones” and “smartphones” generally in violation of U.S. antitrust laws.",
+    "relevant_chunk_ids": [
+      "0cf16aec-69be-4182-a5d2-31ae268be5a4"
+    ],
+    "page_number": 25
+  },
+  {
+    "question": "What potential negative consequences could the Company face if matters are resolved unfavorably against it?",
+    "ground_truth": "The Company can be exposed to significant fines and may be required to make further changes to its business practices, all of which could materially adversely affect the Company’s business, reputation, results of operations, financial condition and stock price.",
+    "relevant_chunk_ids": [
+      "1660e3cf-35a8-4316-ae38-b2365308fa00"
+    ],
+    "page_number": 25
+  },
+  {
+    "question": "When was Google found to have violated U.S. antitrust laws, according to the document?",
+    "ground_truth": "Google was found to have violated U.S. antitrust laws on August 5, 2024.",
+    "relevant_chunk_ids": [
+      "efc5ff67-f6b9-4a5a-99ae-0f92007d6615"
+    ],
+    "page_number": 26
+  },
+  {
+    "question": "What potential consequence could a reversal of the court's order on appeal have regarding Google and the Company?",
+    "ground_truth": "A reversal of the order on appeal could result in the imposition of certain remedies initially proposed by the DOJ, such as those prohibiting Google from offering the Company commercial terms for search distribution, which could materially adversely affect the Company’s ability to earn revenue from such licensing arrangements.",
+    "relevant_chunk_ids": [
+      "66a7629c-b4fa-4310-b95a-a4161d243573"
+    ],
+    "page_number": 26
+  },
+  {
+    "question": "What types of laws, rules, and policies is the Company's business subject to regarding personal data?",
+    "ground_truth": "The Company's business is subject to a variety of U.S. and international laws, rules, policies and other obligations regarding the collection, use, protection, retention, and transfer of personal data.",
+    "relevant_chunk_ids": [
+      "d70f5f15-6b94-4979-9cf7-4be3d635de0b"
+    ],
+    "page_number": 26
+  },
+  {
+    "question": "What specific country is mentioned as having regulatory requirements relating to data processing and localization that could limit the Company's ability to transfer data outside of its borders?",
+    "ground_truth": "China",
+    "relevant_chunk_ids": [
+      "f2f5a312-2643-40e7-bb5c-cadfe7d9688a"
+    ],
+    "page_number": 26
+  },
+  {
+    "question": "What technological feature is mentioned as capable of increasing the risks of inadvertent disclosure of personal data?",
+    "ground_truth": "Artificial intelligence features",
+    "relevant_chunk_ids": [
+      "55f33694-91f3-41e2-a862-2c0c2a8f7520"
+    ],
+    "page_number": 26
+  },
+  {
+    "question": "What types of information are considered sensitive under applicable laws and are subject to additional privacy, security, and breach notification requirements according to the text?",
+    "ground_truth": "Health, biometric, financial and payment card data are considered sensitive under applicable laws and are subject to additional privacy, security and breach notification requirements.",
+    "relevant_chunk_ids": [
+      "e6608103-5a7a-470e-ac4a-773b3129166e"
+    ],
+    "page_number": 26
+  },
+  {
+    "question": "What potential consequences can failure to comply with changing laws and regulations regarding online safety and mandatory age verification have for the Company?",
+    "ground_truth": "Failure to comply with such changing laws, regulations and other legal obligations can result in significant penalties and fines, and legal liability.",
+    "relevant_chunk_ids": [
+      "fdd322c5-ea21-44a8-ae65-464b25a9504a"
+    ],
+    "page_number": 26
+  },
+  {
+    "question": "What was the average price paid per share for open market and privately negotiated purchases during the period from May 31, 2026 to June 27, 2026?",
+    "ground_truth": "$296.18",
+    "relevant_chunk_ids": [
+      "2beda2f1-bc33-47c6-8fbc-2803a976bcaa"
+    ],
+    "page_number": 27
+  },
+  {
+    "question": "What was the remaining availability under the May 2025 stock repurchase program as of June 27, 2026?",
+    "ground_truth": "$38.0 billion",
+    "relevant_chunk_ids": [
+      "c7b53f80-207f-4b2b-a77b-91e1e93b46ee"
+    ],
+    "page_number": 27
+  },
+  {
+    "question": "When do the purchase periods for the company's Accelerated Share Repurchases (ASRs) end?",
+    "ground_truth": "They end in the fourth quarter of 2026.",
+    "relevant_chunk_ids": [
+      "064c8092-6e23-4d0b-95b6-117590c789fc"
+    ],
+    "page_number": 27
+  },
+  {
+    "question": "When did Jennifer Newstead enter into her trading plan and what is the maximum number of common stock shares it provides for the sale of?",
+    "ground_truth": "Jennifer Newstead entered into her trading plan on May 5, 2026, and the plan provides for the sale of up to 24,912 shares of common stock (subject to certain price limits).",
+    "relevant_chunk_ids": [
+      "2ee5e52d-b5f7-48f5-8343-48ffe6aca57c"
+    ],
+    "page_number": 28
+  },
+  {
+    "question": "When does Mr. Cook's plan expire?",
+    "ground_truth": "Mr. Cook's plan will expire on October 30, 2026, subject to early termination in accordance with the terms of the plan.",
+    "relevant_chunk_ids": [
+      "1e360aaa-0307-41a5-a4bd-502be2132e5c"
+    ],
+    "page_number": 28
+  },
+  {
+    "question": "Who signed the Apple Inc. Q3 2026 Form 10-Q report on behalf of the registrant, and what is their title?",
+    "ground_truth": "Kevan Parekh, Senior Vice President, Chief Financial Officer",
+    "relevant_chunk_ids": [
+      "d3558f6a-aba9-4dab-9886-d3e40084fe8c"
+    ],
+    "page_number": 29
+  },
+  {
+    "question": "Who is the certifying individual for Apple Inc.'s quarterly report on Form 10-Q in Exhibit 31.1?",
+    "ground_truth": "Timothy D. Cook",
+    "relevant_chunk_ids": [
+      "6516bf19-4fef-4629-b9d3-853b6423066d"
+    ],
+    "page_number": 30
+  },
+  {
+    "question": "What is the purpose of designing internal control over financial reporting as described in the document?",
+    "ground_truth": "To provide reasonable assurance regarding the reliability of financial reporting and the preparation of financial statements for external purposes in accordance with generally accepted accounting principles.",
+    "relevant_chunk_ids": [
+      "1cd6e6be-37b4-43f7-b07b-c549d13a9790"
+    ],
+    "page_number": 30
+  },
+  {
+    "question": "Based on the most recent evaluation of internal control over financial reporting, what must be disclosed to the Registrant's auditors and the audit committee of the board of directors?",
+    "ground_truth": "All significant deficiencies and material weaknesses in the design or operation of internal control over financial reporting which are reasonably likely to adversely affect the Registrant's ability to record, process, summarize and report financial information.",
+    "relevant_chunk_ids": [
+      "01d0e8f1-19f9-4b16-b059-c8fff436272a"
+    ],
+    "page_number": 30
+  },
+  {
+    "question": "Who is the Chief Executive Officer that signed the document dated July 31, 2026?",
+    "ground_truth": "Timothy D. Cook",
+    "relevant_chunk_ids": [
+      "67670408-c524-4e7f-a337-a39a1ada480e"
+    ],
+    "page_number": 30
+  },
+  {
+    "question": "Who is the certifying individual for the Apple Inc. quarterly report on Form 10-Q according to Exhibit 31.2?",
+    "ground_truth": "Kevan Parekh",
+    "relevant_chunk_ids": [
+      "09de47f9-8b6e-4fda-b3b3-9b93a63c8108"
+    ],
+    "page_number": 31
+  },
+  {
+    "question": "What is the purpose of designing internal control over financial reporting as described in the text?",
+    "ground_truth": "To provide reasonable assurance regarding the reliability of financial reporting and the preparation of financial statements for external purposes in accordance with generally accepted accounting principles.",
+    "relevant_chunk_ids": [
+      "4fc5a8d9-159a-421b-984e-43997cfcd5c3"
+    ],
+    "page_number": 31
+  },
+  {
+    "question": "Based on the most recent evaluation of internal control over financial reporting, what must be disclosed to the Registrant's auditors and the audit committee of the board of directors?",
+    "ground_truth": "All significant deficiencies and material weaknesses in the design or operation of internal control over financial reporting which are reasonably likely to adversely affect the Registrant's ability to record, process, summarize and report financial information.",
+    "relevant_chunk_ids": [
+      "f5ab390b-7504-4e01-9dd8-f715eae12836"
+    ],
+    "page_number": 31
+  },
+  {
+    "question": "Who signed as the Senior Vice President and Chief Financial Officer on July 31, 2026?",
+    "ground_truth": "Kevan Parekh",
+    "relevant_chunk_ids": [
+      "88f09204-b273-40d4-89f5-178e02861194"
+    ],
+    "page_number": 31
+  },
+  {
+    "question": "Who is the Chief Executive Officer of Apple Inc. certifying the Form 10-Q for the period ended June 27, 2026?",
+    "ground_truth": "Timothy D. Cook",
+    "relevant_chunk_ids": [
+      "2fa84be9-0d6e-47a4-90b4-aec392ca1a00"
+    ],
+    "page_number": 32
+  },
+  {
+    "question": "Who signed the written statement as the Senior Vice President and Chief Financial Officer of Apple Inc. on July 31, 2026?",
+    "ground_truth": "Kevan Parekh",
+    "relevant_chunk_ids": [
+      "a96ae5a0-037a-42c0-95cf-a6e9bce4d015"
+    ],
+    "page_number": 32
+  }
+]
