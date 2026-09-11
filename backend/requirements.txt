@@ -35,8 +35,8 @@ psycopg[binary]
 
 # LLM Providers
 # openai
-# google-genai
-groq
+google-genai
+# groq
 
 # Logging
 python-json-logger
@@ -50,3 +50,6 @@ tenacity
 # Testing
 pytest
 pytest-asyncio
+
+#evaluation
+ragas
