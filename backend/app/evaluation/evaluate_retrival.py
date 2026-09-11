@@ -9,10 +9,15 @@ from app.services.hybird_retrival import retrieve_hybrid_chunks
 from app.services.reranker import retrieve_and_rerank
 
 
+import os
+from dotenv import load_dotenv
+
+load_dotenv()
+
 DATASET_PATH = Path("app/evaluation/dataset/dataset.json")
 
 SESSION_ID = UUID(
-    "11111111-1111-1111-1111-111111111111"
+    os.getenv("EVAL_SESSION_ID", "11111111-1111-1111-1111-111111111111")
 )
 
 TOP_K = 5

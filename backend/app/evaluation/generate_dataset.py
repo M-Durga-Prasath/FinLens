@@ -66,9 +66,14 @@ Chunk:
         return None
 
 
+from dotenv import load_dotenv
+
+load_dotenv()
+
+
 async def main():
     document_id = UUID(
-        "11111111-1111-1111-1111-111111111111"
+        os.getenv("EVAL_DOCUMENT_ID", "11111111-1111-1111-1111-111111111111")
     )
 
     chunks = await get_chunks(document_id)
