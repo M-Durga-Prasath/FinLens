@@ -1,0 +1,26 @@
+{
+  "dense": {
+    "partial_hit_rate": 0.9545454545454546,
+    "complete_hit_rate": 0.3181818181818182,
+    "recall": 0.659090909090909,
+    "mrr": 0.6734848484848485
+  },
+  "bm25": {
+    "partial_hit_rate": 1.0,
+    "complete_hit_rate": 0.36363636363636365,
+    "recall": 0.696969696969697,
+    "mrr": 0.8257575757575757
+  },
+  "hybrid": {
+    "partial_hit_rate": 0.9545454545454546,
+    "complete_hit_rate": 0.4090909090909091,
+    "recall": 0.6818181818181819,
+    "mrr": 0.8636363636363636
+  },
+  "reranker": {
+    "partial_hit_rate": 1.0,
+    "complete_hit_rate": 0.13636363636363635,
+    "recall": 0.5530303030303031,
+    "mrr": 0.9242424242424243
+  }
+}
