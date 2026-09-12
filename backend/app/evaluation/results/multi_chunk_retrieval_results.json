@@ -7,20 +7,20 @@
   },
   "bm25": {
     "partial_hit_rate": 1.0,
-    "complete_hit_rate": 0.36363636363636365,
-    "recall": 0.696969696969697,
+    "complete_hit_rate": 0.45454545454545453,
+    "recall": 0.7424242424242423,
     "mrr": 0.8257575757575757
   },
   "hybrid": {
     "partial_hit_rate": 0.9545454545454546,
-    "complete_hit_rate": 0.4090909090909091,
-    "recall": 0.6818181818181819,
+    "complete_hit_rate": 0.5,
+    "recall": 0.7121212121212123,
     "mrr": 0.8636363636363636
   },
   "reranker": {
     "partial_hit_rate": 1.0,
-    "complete_hit_rate": 0.13636363636363635,
-    "recall": 0.5530303030303031,
+    "complete_hit_rate": 0.45454545454545453,
+    "recall": 0.7196969696969697,
     "mrr": 0.9242424242424243
   }
 }

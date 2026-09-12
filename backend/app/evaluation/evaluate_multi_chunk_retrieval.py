@@ -20,7 +20,7 @@ SESSION_ID = UUID(
     os.getenv("EVAL_SESSION_ID", "11111111-1111-1111-1111-111111111111")
 )
 
-TOP_K = 5
+TOP_K = 6
 CANDIDATE_K = 20
 
 
@@ -174,10 +174,10 @@ async def main():
 
     print(
         f"{'Method':<15}"
-        f"{'PartialHit@5':>15}"
-        f"{'CompleteHit@5':>16}"
-        f"{'Recall@5':>12}"
-        f"{'MRR@5':>12}"
+        f"{'PartialHit@' + str(TOP_K):>15}"
+        f"{'CompleteHit@' + str(TOP_K):>16}"
+        f"{'Recall@' + str(TOP_K):>12}"
+        f"{'MRR@' + str(TOP_K):>12}"
     )
 
     print("-" * 75)

@@ -329,3 +329,28 @@ project/
 
 # deduplicatiing context
 
+---
+
+# Real-World Engineering Challenge & Solution: Reranker vs. Multi-Chunk Hit Rate Trade-off
+
+### **Q: What major issue did you face with the Cross-Encoder Reranker in multi-chunk retrieval, and how did you resolve it?**
+
+**The Problem (High MRR but Low Complete Hit Rate / Recall):**
+When evaluating our initial retrieval pipeline on multi-chunk financial questions, we observed a striking discrepancy:
+- **Hybrid Retrieval (Dense + BM25 via RRF)**: Complete Hit Rate @ 5 = **59.1%**, Recall = **76.5%**, MRR = **0.864**
+- **Standard Cross-Encoder Reranker**: MRR = **0.924** (excellent single-chunk precision/ranking), but Complete Hit Rate @ 5 dropped drastically to **18.2%** and Recall dropped to **63.6%**.
+
+**Root Cause:**
+The Cross-Encoder scored individual chunks independently for semantic relevance to the query. As a result, the top reranked positions were often dominated by slight variations or contiguous sections of the *single* most relevant paragraph, completely filtering out other distinct chunks needed to answer multi-part questions. The reranker maximized precision per chunk at the expense of overall document coverage.
+
+**The Solution (`hybrid_aware_select` strategy):**
+Instead of letting the reranker completely overwrite the hybrid candidate set, we implemented a **Hybrid-Aware Selection Strategy**:
+1. Score all 20 hybrid candidates using the Cross-Encoder.
+2. **Reserve 3 slots for Precision**: Pick the top 3 chunks ranked by the Cross-Encoder score.
+3. **Reserve 3 slots for Coverage**: Pick the top 3 remaining chunks from the Hybrid (RRF) ranking that were not already selected by the reranker.
+
+**The Result:**
+- Preserved the high **MRR (0.924)** because the single most relevant chunk stays at rank #1 or #2 from the cross-encoder.
+- Boosted **Complete Hit Rate to ~48–59%** and restored high Recall by maintaining diverse chunk coverage that BM25 and Dense search retrieved across different document sections.
+
+
