@@ -51,5 +51,6 @@ tenacity
 pytest
 pytest-asyncio
 
-#evaluation
-ragas
+# Evaluation
+ragas==0.4.3
+langchain-community==0.3.31
