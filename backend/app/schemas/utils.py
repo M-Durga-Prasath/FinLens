@@ -41,7 +41,7 @@ class RetrievedChunk(BaseModel):
     token_count: int | None
     similarity: float
     rrf_score: float | None = None
-
+    reranker_score: float | None = None
 
 class RetrievalResponse(BaseModel):
     query: str

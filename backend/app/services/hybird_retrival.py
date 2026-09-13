@@ -69,4 +69,4 @@ async def retrieve_hybrid_chunks(
         [dense_results, bm25_results],
     )
 
-    return fused_results[:top_k]
+    return fused_results[:candidate_k]
