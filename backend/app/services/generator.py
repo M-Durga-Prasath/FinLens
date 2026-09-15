@@ -88,7 +88,21 @@ def generate_with_gemini(prompt: str) -> str:
     return response.text
 
 
+def generate_with_gemini_stream(prompt: str):
+    client = get_gemini_client()
 
+    response = client.models.generate_content_stream(
+        model=os.getenv(
+            "GEMINI_MODEL",
+            "gemma-4-31b-a4b-it",
+        ),
+        contents=prompt,
+    )
+
+    for chunk in response:
+        if chunk.text:
+            yield chunk.text
+            
 
 async def generate_answer(
     query: str,
@@ -139,4 +153,63 @@ async def generate_answer(
     return {
         "answer": answer,
         "sources": sources,
+    }
+
+
+async def generate_answer_stream(
+    query: str,
+    session_id: UUID,
+    top_k: int = 6,
+    candidate_k: int = 20,
+):
+    if not query.strip():
+        yield {
+            "type": "error",
+            "message": "Query cannot be empty.",
+        }
+        return
+
+    chunks = await retrieve_and_rerank(
+        query=query,
+        session_id=session_id,
+        top_k=top_k,
+        candidate_k=candidate_k,
+    )
+
+    if not chunks:
+        yield {
+            "type": "answer",
+            "content": (
+                "I could not find relevant information "
+                "in the uploaded documents."
+            ),
+        }
+        return
+
+    context = build_context(chunks)
+
+    prompt = build_prompt(
+        query=query,
+        context=context,
+    )
+
+    provider = os.getenv(
+        "LLM_PROVIDER",
+        "gemini",
+    ).lower()
+
+    if provider != "gemini":
+        raise ValueError(
+            f"Unsupported LLM provider: {provider}"
+        )
+
+    for text in generate_with_gemini_stream(prompt):
+        yield {
+            "type": "token",
+            "content": text,
+        }
+
+    yield {
+        "type": "sources",
+        "sources": build_sources(chunks),
     }
