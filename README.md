@@ -80,6 +80,7 @@ finance_rag/
 │   ├── prisma/
 │   │   └── schema.prisma # Prisma database schema (User, Session, Document, Chunk, Citation)
 │   └── requirements.txt  # Python backend dependencies
+│   └── tests/            # evaluation of  RAG services (extraction, chunking, embedding, retrieval, reranking)
 ├── frontend/
 │   ├── app/              # Next.js App Router pages (Home, Chat, API routes)
 │   ├── app/components/   # React components (ShapeGrid, Sidebar, MessageView, etc.)
