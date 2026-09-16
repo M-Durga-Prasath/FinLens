@@ -1,4 +1,6 @@
 import os
+import time
+import logging
 from functools import lru_cache
 from uuid import UUID
 
@@ -35,10 +37,11 @@ def build_sources(chunks: list[dict]) -> list[dict]:
         sources.append(
             {
                 "citation_id": index,
-                "chunk_id": chunk["id"],
-                "document_id": chunk["document_id"],
+                "chunk_id": str(chunk["id"]),
+                "document_id": str(chunk["document_id"]),
                 "document_filename": chunk["document_filename"],
                 "page_number": chunk["page_number"],
+                "relevance_score": chunk.get("reranker_score", 0.0),
             }
         )
 
@@ -74,35 +77,60 @@ def build_prompt(
             """.strip()
 
 
+MAX_RETRIES = 3
+INITIAL_RETRY_DELAY = 2  # seconds
+
+logger = logging.getLogger(__name__)
+
+
 def generate_with_gemini(prompt: str) -> str:
     client = get_gemini_client()
+    model = os.getenv("GEMINI_MODEL", "gemma-4-31b-it")
 
-    response = client.models.generate_content(
-        model=os.getenv(
-            "GEMINI_MODEL",
-            "gemma-4-31b-a4b-it",
-        ),
-        contents=prompt,
-    )
-
-    return response.text
+    for attempt in range(1, MAX_RETRIES + 1):
+        try:
+            response = client.models.generate_content(
+                model=model,
+                contents=prompt,
+            )
+            return response.text
+        except Exception as exc:
+            if attempt == MAX_RETRIES:
+                raise
+            wait = INITIAL_RETRY_DELAY * (2 ** (attempt - 1))
+            logger.warning(
+                "Gemini attempt %d/%d failed (%s), retrying in %ds...",
+                attempt, MAX_RETRIES, exc, wait,
+            )
+            time.sleep(wait)
 
 
 def generate_with_gemini_stream(prompt: str):
     client = get_gemini_client()
+    model = os.getenv("GEMINI_MODEL", "gemma-4-31b-it")
 
-    response = client.models.generate_content_stream(
-        model=os.getenv(
-            "GEMINI_MODEL",
-            "gemma-4-31b-a4b-it",
-        ),
-        contents=prompt,
-    )
+    for attempt in range(1, MAX_RETRIES + 1):
+        try:
+            response = client.models.generate_content_stream(
+                model=model,
+                contents=prompt,
+            )
 
-    for chunk in response:
-        if chunk.text:
-            yield chunk.text
-            
+            for chunk in response:
+                if chunk.text:
+                    yield chunk.text
+
+            return  # stream completed successfully
+        except Exception as exc:
+            if attempt == MAX_RETRIES:
+                raise
+            wait = INITIAL_RETRY_DELAY * (2 ** (attempt - 1))
+            logger.warning(
+                "Gemini stream attempt %d/%d failed (%s), retrying in %ds...",
+                attempt, MAX_RETRIES, exc, wait,
+            )
+            time.sleep(wait)
+
 
 async def generate_answer(
     query: str,
