@@ -1,17 +1,22 @@
 "use client";
 
 import { useState, useCallback, useEffect } from "react";
+import { useSession } from "next-auth/react";
 import Sidebar from "../components/Sidebar";
 import ChatArea from "../components/ChatArea";
 import ChatInput from "../components/ChatInput";
 
+const BACKEND_URL = "http://localhost:8000";
+
 export default function ChatPage() {
+  const { data: session } = useSession();
   const [chats, setChats] = useState([]);
   const [activeChatId, setActiveChatId] = useState(null);
   const [messages, setMessages] = useState({});
   const [uploadedFiles, setUploadedFiles] = useState([]);
   const [isUploading, setIsUploading] = useState(false);
   const [isLoadingChats, setIsLoadingChats] = useState(true);
+  const [isStreaming, setIsStreaming] = useState(false);
 
   // Fetch initial chat sessions from DB
   const fetchSessions = useCallback(async () => {
@@ -143,6 +148,8 @@ export default function ChatPage() {
 
   const handleSend = useCallback(
     async (text) => {
+      if (isStreaming) return;
+
       let chatId = activeChatId;
 
       // If no active chat, create one with the message as title
@@ -162,41 +169,139 @@ export default function ChatPage() {
 
       // Optimistic user message addition
       const userMsg = { role: "user", content: text };
+      // Streaming model message placeholder
+      const streamingMsg = { role: "model", content: "", isStreaming: true };
+
       setMessages((prev) => ({
         ...prev,
-        [chatId]: [...(prev[chatId] || []), userMsg],
+        [chatId]: [...(prev[chatId] || []), userMsg, streamingMsg],
       }));
 
+      setIsStreaming(true);
+
       try {
-        // Persist user message in DB
-        await fetch(`/api/sessions/${chatId}/messages`, {
+        const res = await fetch(`${BACKEND_URL}/chat/`, {
           method: "POST",
           headers: { "Content-Type": "application/json" },
-          body: JSON.stringify({ role: "USER", content: text }),
+          body: JSON.stringify({
+            query: text,
+            session_id: chatId,
+            top_k: 6,
+            candidate_k: 20,
+          }),
         });
 
-        // Assistant reply placeholder (will integrate with AI model / backend RAG pipeline)
-        const assistantText = `I have received your query: "${text}". Ask questions about uploaded documents or financial metrics anytime.`;
-
-        // Persist assistant message in DB
-        const assistantRes = await fetch(`/api/sessions/${chatId}/messages`, {
-          method: "POST",
-          headers: { "Content-Type": "application/json" },
-          body: JSON.stringify({ role: "MODEL", content: assistantText }),
-        });
-
-        if (assistantRes.ok) {
-          const modelMsgObj = { role: "model", content: assistantText };
-          setMessages((prev) => ({
-            ...prev,
-            [chatId]: [...(prev[chatId] || []), modelMsgObj],
-          }));
+        if (!res.ok) {
+          const errData = await res.json().catch(() => ({}));
+          throw new Error(errData.detail || `Request failed (${res.status})`);
         }
+
+        const reader = res.body.getReader();
+        const decoder = new TextDecoder();
+        let buffer = "";
+
+        while (true) {
+          const { done, value } = await reader.read();
+          if (done) break;
+
+          buffer += decoder.decode(value, { stream: true });
+          const lines = buffer.split("\n");
+          // Keep the last incomplete line in the buffer
+          buffer = lines.pop() || "";
+
+          for (const line of lines) {
+            const trimmed = line.trim();
+            if (!trimmed.startsWith("data: ")) continue;
+
+            const jsonStr = trimmed.slice(6);
+            let event;
+            try {
+              event = JSON.parse(jsonStr);
+            } catch {
+              continue;
+            }
+
+            if (event.type === "token") {
+              // Append token to the streaming model message
+              setMessages((prev) => {
+                const chatMsgs = [...(prev[chatId] || [])];
+                const lastMsg = chatMsgs[chatMsgs.length - 1];
+                if (lastMsg && lastMsg.role === "model" && lastMsg.isStreaming) {
+                  chatMsgs[chatMsgs.length - 1] = {
+                    ...lastMsg,
+                    content: lastMsg.content + event.content,
+                  };
+                }
+                return { ...prev, [chatId]: chatMsgs };
+              });
+            } else if (event.type === "error") {
+              // Show error in the model message
+              setMessages((prev) => {
+                const chatMsgs = [...(prev[chatId] || [])];
+                const lastMsg = chatMsgs[chatMsgs.length - 1];
+                if (lastMsg && lastMsg.role === "model" && lastMsg.isStreaming) {
+                  chatMsgs[chatMsgs.length - 1] = {
+                    ...lastMsg,
+                    content: event.message,
+                    isStreaming: false,
+                    isError: true,
+                  };
+                }
+                return { ...prev, [chatId]: chatMsgs };
+              });
+            } else if (event.type === "sources") {
+              // Sources arrive at the end — mark streaming complete
+              setMessages((prev) => {
+                const chatMsgs = [...(prev[chatId] || [])];
+                const lastMsg = chatMsgs[chatMsgs.length - 1];
+                if (lastMsg && lastMsg.role === "model" && lastMsg.isStreaming) {
+                  chatMsgs[chatMsgs.length - 1] = {
+                    ...lastMsg,
+                    isStreaming: false,
+                    sources: event.sources,
+                  };
+                }
+                return { ...prev, [chatId]: chatMsgs };
+              });
+            }
+          }
+        }
+
+        // Finalize: ensure streaming flag is cleared even if no sources event
+        setMessages((prev) => {
+          const chatMsgs = [...(prev[chatId] || [])];
+          const lastMsg = chatMsgs[chatMsgs.length - 1];
+          if (lastMsg && lastMsg.role === "model" && lastMsg.isStreaming) {
+            chatMsgs[chatMsgs.length - 1] = {
+              ...lastMsg,
+              isStreaming: false,
+            };
+          }
+          return { ...prev, [chatId]: chatMsgs };
+        });
       } catch (err) {
-        console.error("Failed to send message:", err);
+        console.error("Streaming failed:", err);
+        // Show error in the model message
+        setMessages((prev) => {
+          const chatMsgs = [...(prev[chatId] || [])];
+          const lastMsg = chatMsgs[chatMsgs.length - 1];
+          if (lastMsg && lastMsg.role === "model") {
+            chatMsgs[chatMsgs.length - 1] = {
+              ...lastMsg,
+              content:
+                lastMsg.content ||
+                "Failed to connect to the server. Please try again.",
+              isStreaming: false,
+              isError: true,
+            };
+          }
+          return { ...prev, [chatId]: chatMsgs };
+        });
+      } finally {
+        setIsStreaming(false);
       }
     },
-    [activeChatId, chats, createNewChat, handleRenameChat]
+    [activeChatId, chats, createNewChat, handleRenameChat, isStreaming]
   );
 
   const handleFileUpload = useCallback(
@@ -204,26 +309,34 @@ export default function ChatPage() {
       setIsUploading(true);
 
       try {
+        let chatId = activeChatId;
+        if (!chatId) {
+          chatId = await createNewChat(file.name);
+          if (!chatId) return;
+        }
+
         const formData = new FormData();
         formData.append("file", file);
+        formData.append("user_id", session?.user?.id ?? "");
+        formData.append("session_id", chatId);
 
-        const res = await fetch("http://localhost:8000/upload/", {
+        const res = await fetch(`${BACKEND_URL}/upload/`, {
           method: "POST",
           body: formData,
         });
 
         if (!res.ok) {
-          const err = await res.json().catch(() => ({}));
-          throw new Error(err.detail || `Upload failed (${res.status})`);
+          const errBody = await res.json().catch(() => ({}));
+          const detail = Array.isArray(errBody.detail)
+            ? errBody.detail.map((e) => e.msg || JSON.stringify(e)).join("; ")
+            : errBody.detail;
+          throw new Error(detail || `Upload failed (${res.status})`);
         }
 
         const data = await res.json();
         setUploadedFiles((prev) => [...prev, data.filename || file.name]);
 
-        let chatId = activeChatId;
-        if (!chatId) {
-          chatId = await createNewChat(file.name);
-        }
+        // Chat was already created/resolved above
       } catch (err) {
         console.error("Upload failed:", err);
         const chatId = activeChatId;
@@ -243,7 +356,7 @@ export default function ChatPage() {
         setIsUploading(false);
       }
     },
-    [activeChatId, createNewChat]
+    [activeChatId, createNewChat, session]
   );
 
   return (
@@ -264,11 +377,12 @@ export default function ChatPage() {
           </div>
         ) : (
           <>
-            <ChatArea messages={activeMessages} uploadedFiles={uploadedFiles} />
+            <ChatArea messages={activeMessages} uploadedFiles={uploadedFiles} isStreaming={isStreaming} />
             <ChatInput
               onSend={handleSend}
               onFileUpload={handleFileUpload}
               isUploading={isUploading}
+              isStreaming={isStreaming}
             />
           </>
         )}
