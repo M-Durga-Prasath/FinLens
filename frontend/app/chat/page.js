@@ -221,7 +221,7 @@ export default function ChatPage() {
               continue;
             }
 
-            if (event.type === "token") {
+            if (event.type === "token" || event.type === "answer") {
               // Append token to the streaming model message
               setMessages((prev) => {
                 const chatMsgs = [...(prev[chatId] || [])];
@@ -281,18 +281,22 @@ export default function ChatPage() {
         });
       } catch (err) {
         console.error("Streaming failed:", err);
-        // Show error in the model message
+        // If we already received content, the stream was essentially complete
+        // and the error is likely from the server closing the connection after
+        // persisting (e.g. DB save failure). Just finalize the message.
         setMessages((prev) => {
           const chatMsgs = [...(prev[chatId] || [])];
           const lastMsg = chatMsgs[chatMsgs.length - 1];
           if (lastMsg && lastMsg.role === "model") {
+            const hasContent = !!lastMsg.content;
             chatMsgs[chatMsgs.length - 1] = {
               ...lastMsg,
               content:
                 lastMsg.content ||
                 "Failed to connect to the server. Please try again.",
               isStreaming: false,
-              isError: true,
+              // Only mark as error if we never received any content
+              isError: !hasContent,
             };
           }
           return { ...prev, [chatId]: chatMsgs };
