@@ -1,5 +1,5 @@
 import json
-
+import logging
 from fastapi import APIRouter
 from fastapi.responses import StreamingResponse
 
@@ -27,7 +27,7 @@ async def chat(request: ChatRequest):
             top_k=request.top_k,
             candidate_k=request.candidate_k,
         ):
-            if event["type"] == "token":
+            if event["type"] in ("token", "answer"):
                 collected_tokens.append(event["content"])
 
             elif event["type"] == "sources":
@@ -48,7 +48,7 @@ async def chat(request: ChatRequest):
                 # 1. Save user message
                 await conn.execute(
                     """
-                    INSERT INTO messages (id, role, content, session_id)
+                    INSERT INTO messages (id, role, content, "sessionId")
                     VALUES (gen_random_uuid(), 'USER', $1, $2)
                     """,
                     request.query,
@@ -58,7 +58,7 @@ async def chat(request: ChatRequest):
                 # 2. Save model message and get its id
                 model_msg_id = await conn.fetchval(
                     """
-                    INSERT INTO messages (id, role, content, session_id)
+                    INSERT INTO messages (id, role, content, "sessionId")
                     VALUES (gen_random_uuid(), 'MODEL', $1, $2)
                     RETURNING id
                     """,
@@ -88,9 +88,8 @@ async def chat(request: ChatRequest):
     async def streaming_with_persist():
         async for chunk in event_generator():
             yield chunk
-
         await on_stream_complete()
-
+        
     return StreamingResponse(
         streaming_with_persist(),
         media_type="text/event-stream",

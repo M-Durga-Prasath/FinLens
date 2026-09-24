@@ -159,7 +159,6 @@ export default function ChatPage() {
         chatId = await createNewChat(generatedTitle);
         if (!chatId) return;
       } else {
-        // Auto update title if current session title is "New conversation"
         const currentChat = chats.find((c) => c.id === chatId);
         if (currentChat && currentChat.title === "New conversation") {
           const autoTitle = text.length > 35 ? text.slice(0, 35) + "…" : text;
@@ -167,9 +166,7 @@ export default function ChatPage() {
         }
       }
 
-      // Optimistic user message addition
       const userMsg = { role: "user", content: text };
-      // Streaming model message placeholder
       const streamingMsg = { role: "model", content: "", isStreaming: true };
 
       setMessages((prev) => ({
@@ -206,7 +203,6 @@ export default function ChatPage() {
 
           buffer += decoder.decode(value, { stream: true });
           const lines = buffer.split("\n");
-          // Keep the last incomplete line in the buffer
           buffer = lines.pop() || "";
 
           for (const line of lines) {
@@ -222,7 +218,6 @@ export default function ChatPage() {
             }
 
             if (event.type === "token" || event.type === "answer") {
-              // Append token to the streaming model message
               setMessages((prev) => {
                 const chatMsgs = [...(prev[chatId] || [])];
                 const lastMsg = chatMsgs[chatMsgs.length - 1];
@@ -235,7 +230,6 @@ export default function ChatPage() {
                 return { ...prev, [chatId]: chatMsgs };
               });
             } else if (event.type === "error") {
-              // Show error in the model message
               setMessages((prev) => {
                 const chatMsgs = [...(prev[chatId] || [])];
                 const lastMsg = chatMsgs[chatMsgs.length - 1];
@@ -250,7 +244,6 @@ export default function ChatPage() {
                 return { ...prev, [chatId]: chatMsgs };
               });
             } else if (event.type === "sources") {
-              // Sources arrive at the end — mark streaming complete
               setMessages((prev) => {
                 const chatMsgs = [...(prev[chatId] || [])];
                 const lastMsg = chatMsgs[chatMsgs.length - 1];
@@ -267,7 +260,6 @@ export default function ChatPage() {
           }
         }
 
-        // Finalize: ensure streaming flag is cleared even if no sources event
         setMessages((prev) => {
           const chatMsgs = [...(prev[chatId] || [])];
           const lastMsg = chatMsgs[chatMsgs.length - 1];
@@ -281,9 +273,6 @@ export default function ChatPage() {
         });
       } catch (err) {
         console.error("Streaming failed:", err);
-        // If we already received content, the stream was essentially complete
-        // and the error is likely from the server closing the connection after
-        // persisting (e.g. DB save failure). Just finalize the message.
         setMessages((prev) => {
           const chatMsgs = [...(prev[chatId] || [])];
           const lastMsg = chatMsgs[chatMsgs.length - 1];
@@ -295,7 +284,6 @@ export default function ChatPage() {
                 lastMsg.content ||
                 "Failed to connect to the server. Please try again.",
               isStreaming: false,
-              // Only mark as error if we never received any content
               isError: !hasContent,
             };
           }
@@ -340,7 +328,6 @@ export default function ChatPage() {
         const data = await res.json();
         setUploadedFiles((prev) => [...prev, data.filename || file.name]);
 
-        // Chat was already created/resolved above
       } catch (err) {
         console.error("Upload failed:", err);
         const chatId = activeChatId;
