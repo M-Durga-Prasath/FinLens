@@ -3,7 +3,7 @@
 import { useRef, useEffect } from "react";
 import MessageBubble from "./MessageBubble";
 
-export default function ChatArea({ messages, uploadedFiles }) {
+export default function ChatArea({ messages, uploadedFiles, isStreaming }) {
   const bottomRef = useRef(null);
 
   useEffect(() => {
@@ -73,7 +73,13 @@ export default function ChatArea({ messages, uploadedFiles }) {
           )}
 
           {messages.map((msg, i) => (
-            <MessageBubble key={i} role={msg.role} content={msg.content} />
+            <MessageBubble
+              key={i}
+              role={msg.role}
+              content={msg.content}
+              isStreaming={!!msg.isStreaming}
+              isError={!!msg.isError}
+            />
           ))}
           <div ref={bottomRef} />
         </div>

@@ -2,7 +2,7 @@
 
 import { useState, useRef } from "react";
 
-export default function ChatInput({ onSend, onFileUpload, isUploading }) {
+export default function ChatInput({ onSend, onFileUpload, isUploading, isStreaming }) {
   const [input, setInput] = useState("");
   const fileRef = useRef(null);
 
@@ -90,9 +90,10 @@ export default function ChatInput({ onSend, onFileUpload, isUploading }) {
           value={input}
           onChange={(e) => setInput(e.target.value)}
           onKeyDown={handleKeyDown}
-          placeholder="Ask about your documents..."
+          placeholder={isStreaming ? "Waiting for response..." : "Ask about your documents..."}
           rows={1}
-          className="flex-1 resize-none rounded-xl border border-border bg-surface px-4 py-2.5 text-sm text-foreground placeholder:text-text-tertiary focus:border-accent/40 focus:outline-none"
+          disabled={isStreaming}
+          className="flex-1 resize-none rounded-xl border border-border bg-surface px-4 py-2.5 text-sm text-foreground placeholder:text-text-tertiary focus:border-accent/40 focus:outline-none disabled:opacity-50 disabled:cursor-not-allowed"
           style={{ maxHeight: "120px" }}
           id="chat-message-input"
         />
@@ -100,7 +101,7 @@ export default function ChatInput({ onSend, onFileUpload, isUploading }) {
         {/* Send */}
         <button
           type="submit"
-          disabled={!input.trim()}
+          disabled={!input.trim() || isStreaming}
           className="flex h-10 w-10 shrink-0 items-center justify-center rounded-lg bg-accent text-background hover:bg-accent-dim disabled:opacity-30 disabled:hover:bg-accent"
           id="send-message-btn"
         >
