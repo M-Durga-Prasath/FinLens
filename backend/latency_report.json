@@ -1,0 +1,146 @@
+{
+  "cold": [
+    {
+      "guardrail_ms": 0.08,
+      "retrieval_ms": 8555.89,
+      "reranking_ms": 7022.13,
+      "prompt_build_ms": 0.05,
+      "ttft_ms": 9989.67,
+      "generation_ms": 1152.35,
+      "gemini_total_ms": 11142.18,
+      "total_ms": 26725.38,
+      "client_total_ms": 26734.6,
+      "client_ttft_ms": 25587.67,
+      "token_count": 7
+    },
+    {
+      "guardrail_ms": 0.62,
+      "retrieval_ms": 83.4,
+      "reranking_ms": 384.25,
+      "prompt_build_ms": 0.06,
+      "ttft_ms": 1506.96,
+      "generation_ms": 986.44,
+      "gemini_total_ms": 2493.41,
+      "total_ms": 2973.88,
+      "client_total_ms": 2990.76,
+      "client_ttft_ms": 2003.36,
+      "token_count": 6
+    },
+    {
+      "guardrail_ms": 0.1,
+      "retrieval_ms": 27.32,
+      "reranking_ms": 259.61,
+      "prompt_build_ms": 0.04,
+      "ttft_ms": 1274.08,
+      "generation_ms": 933.67,
+      "gemini_total_ms": 2207.78,
+      "total_ms": 2501.89,
+      "client_total_ms": 2504.0,
+      "client_ttft_ms": 1570.0,
+      "token_count": 6
+    },
+    {
+      "guardrail_ms": 0.04,
+      "retrieval_ms": 38.8,
+      "reranking_ms": 344.86,
+      "prompt_build_ms": 0.05,
+      "ttft_ms": 2124.17,
+      "generation_ms": 999.9,
+      "gemini_total_ms": 3124.09,
+      "total_ms": 3514.15,
+      "client_total_ms": 3516.03,
+      "client_ttft_ms": 2515.91,
+      "token_count": 6
+    },
+    {
+      "guardrail_ms": 0.02,
+      "retrieval_ms": 22.28,
+      "reranking_ms": 256.1,
+      "prompt_build_ms": 0.04,
+      "ttft_ms": 1586.32,
+      "generation_ms": 1007.07,
+      "gemini_total_ms": 2593.41,
+      "total_ms": 2876.37,
+      "client_total_ms": 2877.85,
+      "client_ttft_ms": 1870.58,
+      "token_count": 6
+    }
+  ],
+  "warm": [
+    {
+      "guardrail_ms": 0.02,
+      "retrieval_ms": 18.71,
+      "reranking_ms": 336.71,
+      "prompt_build_ms": 0.02,
+      "ttft_ms": 2212.43,
+      "generation_ms": 927.83,
+      "gemini_total_ms": 3140.27,
+      "total_ms": 3499.38,
+      "client_total_ms": 3500.39,
+      "client_ttft_ms": 2572.48,
+      "token_count": 6
+    },
+    {
+      "guardrail_ms": 0.02,
+      "retrieval_ms": 25.92,
+      "reranking_ms": 353.12,
+      "prompt_build_ms": 0.06,
+      "ttft_ms": 1806.61,
+      "generation_ms": 897.03,
+      "gemini_total_ms": 2703.64,
+      "total_ms": 3089.42,
+      "client_total_ms": 3091.27,
+      "client_ttft_ms": 2194.18,
+      "token_count": 6
+    },
+    {
+      "guardrail_ms": 0.02,
+      "retrieval_ms": 23.53,
+      "reranking_ms": 368.59,
+      "prompt_build_ms": 0.07,
+      "ttft_ms": 1372.66,
+      "generation_ms": 1345.24,
+      "gemini_total_ms": 2717.92,
+      "total_ms": 3113.99,
+      "client_total_ms": 3115.02,
+      "client_ttft_ms": 1769.57,
+      "token_count": 7
+    },
+    {
+      "guardrail_ms": 0.03,
+      "retrieval_ms": 21.86,
+      "reranking_ms": 331.93,
+      "prompt_build_ms": 0.03,
+      "ttft_ms": 1565.98,
+      "generation_ms": 1104.2,
+      "gemini_total_ms": 2670.19,
+      "total_ms": 3028.37,
+      "client_total_ms": 3029.71,
+      "client_ttft_ms": 1925.25,
+      "token_count": 7
+    },
+    {
+      "guardrail_ms": 0.02,
+      "retrieval_ms": 25.0,
+      "reranking_ms": 410.91,
+      "prompt_build_ms": 0.03,
+      "ttft_ms": 1225.38,
+      "generation_ms": 1230.82,
+      "gemini_total_ms": 2456.22,
+      "total_ms": 2895.94,
+      "client_total_ms": 2896.92,
+      "client_ttft_ms": 1665.91,
+      "token_count": 7
+    }
+  ],
+  "metadata": {
+    "query": "What were the total revenues reported?",
+    "session_id": "06738e01-cb08-4727-8810-56413ed41755",
+    "top_k": 6,
+    "candidate_k": 20,
+    "base_url": "http://localhost:8000",
+    "timestamp": "2026-09-26T21:08:52.611058",
+    "cold_runs": 5,
+    "warm_runs": 5
+  }
+}
