@@ -79,6 +79,7 @@ export default function ChatArea({ messages, uploadedFiles, isStreaming }) {
               content={msg.content}
               isStreaming={!!msg.isStreaming}
               isError={!!msg.isError}
+              sources={msg.sources}
             />
           ))}
           <div ref={bottomRef} />

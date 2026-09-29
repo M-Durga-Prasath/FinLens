@@ -21,6 +21,25 @@ export async function GET(req, { params }) {
             role: true,
             content: true,
             createdAt: true,
+            Citations: {
+              select: {
+                id: true,
+                relevanceScore: true,
+                chunk: {
+                  select: {
+                    id: true,
+                    content: true,
+                    pageNumber: true,
+                    document: {
+                      select: {
+                        id: true,
+                        filename: true,
+                      },
+                    },
+                  },
+                },
+              },
+            },
           },
         },
       },

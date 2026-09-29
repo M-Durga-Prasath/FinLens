@@ -34,6 +34,9 @@ def build_sources(chunks: list[dict]) -> list[dict]:
     sources = []
 
     for index, chunk in enumerate(chunks, start=1):
+        content = chunk.get("content", "")
+        preview = (content[:150] + "…") if len(content) > 150 else content
+
         sources.append(
             {
                 "citation_id": index,
@@ -42,6 +45,7 @@ def build_sources(chunks: list[dict]) -> list[dict]:
                 "document_filename": chunk["document_filename"],
                 "page_number": chunk["page_number"],
                 "relevance_score": chunk.get("reranker_score", 0.0),
+                "content_preview": preview,
             }
         )
 
