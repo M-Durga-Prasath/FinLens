@@ -9,6 +9,7 @@ import ChatInput from "../components/ChatInput";
 const BACKEND_URL = "http://localhost:8000";
 
 export default function ChatPage() {
+  const [largeFiles, SetLargeFiles] = useState(false);
   const { data: session } = useSession();
   const [chats, setChats] = useState([]);
   const [activeChatId, setActiveChatId] = useState(null);
@@ -51,11 +52,34 @@ export default function ChatPage() {
         const res = await fetch(`/api/sessions/${activeChatId}`);
         if (res.ok) {
           const data = await res.json();
-          const formatted = (data.messages || []).map((m) => ({
-            id: m.id,
-            role: m.role === "USER" ? "user" : "model",
-            content: m.content,
-          }));
+          const formatted = (data.messages || []).map((m) => {
+            const msg = {
+              id: m.id,
+              role: m.role === "USER" ? "user" : "model",
+              content: m.content,
+            };
+
+            // Map DB citations into the same shape as streaming sources
+            if (m.Citations && m.Citations.length > 0) {
+              msg.sources = m.Citations.map((c, idx) => {
+                const chunkContent = c.chunk?.content || "";
+                return {
+                  citation_id: idx + 1,
+                  chunk_id: c.chunk?.id,
+                  document_id: c.chunk?.document?.id,
+                  document_filename: c.chunk?.document?.filename || "Unknown",
+                  page_number: c.chunk?.pageNumber,
+                  relevance_score: c.relevanceScore,
+                  content_preview:
+                    chunkContent.length > 150
+                      ? chunkContent.slice(0, 150) + "…"
+                      : chunkContent,
+                };
+              });
+            }
+
+            return msg;
+          });
           setMessages((prev) => ({ ...prev, [activeChatId]: formatted }));
         }
       } catch (err) {
@@ -125,7 +149,7 @@ export default function ChatPage() {
         console.error("Failed to delete chat:", err);
       }
     },
-    [activeChatId]
+    [activeChatId],
   );
 
   const handleRenameChat = useCallback(async (id, newTitle) => {
@@ -138,7 +162,7 @@ export default function ChatPage() {
 
       if (res.ok) {
         setChats((prev) =>
-          prev.map((c) => (c.id === id ? { ...c, title: newTitle } : c))
+          prev.map((c) => (c.id === id ? { ...c, title: newTitle } : c)),
         );
       }
     } catch (err) {
@@ -221,7 +245,11 @@ export default function ChatPage() {
               setMessages((prev) => {
                 const chatMsgs = [...(prev[chatId] || [])];
                 const lastMsg = chatMsgs[chatMsgs.length - 1];
-                if (lastMsg && lastMsg.role === "model" && lastMsg.isStreaming) {
+                if (
+                  lastMsg &&
+                  lastMsg.role === "model" &&
+                  lastMsg.isStreaming
+                ) {
                   chatMsgs[chatMsgs.length - 1] = {
                     ...lastMsg,
                     content: lastMsg.content + event.content,
@@ -233,7 +261,11 @@ export default function ChatPage() {
               setMessages((prev) => {
                 const chatMsgs = [...(prev[chatId] || [])];
                 const lastMsg = chatMsgs[chatMsgs.length - 1];
-                if (lastMsg && lastMsg.role === "model" && lastMsg.isStreaming) {
+                if (
+                  lastMsg &&
+                  lastMsg.role === "model" &&
+                  lastMsg.isStreaming
+                ) {
                   chatMsgs[chatMsgs.length - 1] = {
                     ...lastMsg,
                     content: event.message,
@@ -247,7 +279,11 @@ export default function ChatPage() {
               setMessages((prev) => {
                 const chatMsgs = [...(prev[chatId] || [])];
                 const lastMsg = chatMsgs[chatMsgs.length - 1];
-                if (lastMsg && lastMsg.role === "model" && lastMsg.isStreaming) {
+                if (
+                  lastMsg &&
+                  lastMsg.role === "model" &&
+                  lastMsg.isStreaming
+                ) {
                   chatMsgs[chatMsgs.length - 1] = {
                     ...lastMsg,
                     isStreaming: false,
@@ -293,11 +329,17 @@ export default function ChatPage() {
         setIsStreaming(false);
       }
     },
-    [activeChatId, chats, createNewChat, handleRenameChat, isStreaming]
+    [activeChatId, chats, createNewChat, handleRenameChat, isStreaming],
   );
 
   const handleFileUpload = useCallback(
     async (file) => {
+      if (!file) return;
+      if (file.size > 25 * 1024 * 1024) {
+        SetLargeFiles(true);
+        return;
+      }
+
       setIsUploading(true);
 
       try {
@@ -316,20 +358,39 @@ export default function ChatPage() {
           method: "POST",
           body: formData,
         });
-
         if (!res.ok) {
           const errBody = await res.json().catch(() => ({}));
           const detail = Array.isArray(errBody.detail)
             ? errBody.detail.map((e) => e.msg || JSON.stringify(e)).join("; ")
             : errBody.detail;
-          throw new Error(detail || `Upload failed (${res.status})`);
+          const errorMsg = detail || `Upload failed (${res.status})`;
+
+          if (
+            res.status === 413 ||
+            errorMsg.toLowerCase().includes("large") ||
+            errorMsg.toLowerCase().includes("size")
+          ) {
+            SetLargeFiles(true);
+            return;
+          }
+
+          throw new Error(errorMsg);
         }
 
         const data = await res.json();
         setUploadedFiles((prev) => [...prev, data.filename || file.name]);
-
       } catch (err) {
         console.error("Upload failed:", err);
+        const errMsg = err?.message || "";
+        if (
+          errMsg.includes("413") ||
+          errMsg.toLowerCase().includes("large") ||
+          errMsg.toLowerCase().includes("size")
+        ) {
+          SetLargeFiles(true);
+          return;
+        }
+
         const chatId = activeChatId;
         if (chatId) {
           setMessages((prev) => ({
@@ -347,7 +408,7 @@ export default function ChatPage() {
         setIsUploading(false);
       }
     },
-    [activeChatId, createNewChat, session]
+    [activeChatId, createNewChat, session],
   );
 
   return (
@@ -368,7 +429,11 @@ export default function ChatPage() {
           </div>
         ) : (
           <>
-            <ChatArea messages={activeMessages} uploadedFiles={uploadedFiles} isStreaming={isStreaming} />
+            <ChatArea
+              messages={activeMessages}
+              uploadedFiles={uploadedFiles}
+              isStreaming={isStreaming}
+            />
             <ChatInput
               onSend={handleSend}
               onFileUpload={handleFileUpload}
@@ -378,6 +443,63 @@ export default function ChatPage() {
           </>
         )}
       </div>
+
+      {/* Large file Popup Modal */}
+      {largeFiles && (
+        <div
+          className="fixed inset-0 z-50 flex items-center justify-center bg-black/60 backdrop-blur-xs p-4 animate-in fade-in duration-200"
+          onClick={() => SetLargeFiles(false)}
+        >
+          <div
+            className="w-full max-w-md rounded-2xl border border-border bg-surface p-6 shadow-2xl space-y-4"
+            onClick={(e) => e.stopPropagation()}
+          >
+            <div className="flex items-center gap-3">
+              <div className="flex h-10 w-10 shrink-0 items-center justify-center rounded-full bg-amber-500/15 text-amber-400">
+                <svg
+                  width="20"
+                  height="20"
+                  viewBox="0 0 24 24"
+                  fill="none"
+                  stroke="currentColor"
+                  strokeWidth="2"
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
+                >
+                  <circle cx="12" cy="12" r="10" />
+                  <line x1="12" y1="8" x2="12" y2="12" />
+                  <line x1="12" y1="16" x2="12.01" y2="16" />
+                </svg>
+              </div>
+              <div>
+                <h3 className="text-base font-semibold text-foreground">
+                  File Too Large
+                </h3>
+                <p className="text-xs text-text-tertiary">
+                  Maximum file size limit exceeded
+                </p>
+              </div>
+            </div>
+
+            <p className="text-sm text-text-secondary leading-relaxed">
+              The selected file exceeds the maximum allowed size limit of{" "}
+              <span className="font-medium text-foreground">25 MB</span>. Please
+              upload a smaller document or split it into smaller files to
+              continue.
+            </p>
+
+            <div className="flex justify-end gap-2 pt-2">
+              <button
+                type="button"
+                onClick={() => SetLargeFiles(false)}
+                className="rounded-lg bg-accent hover:bg-accent-dim px-4 py-2 text-sm font-medium text-background transition-colors cursor-pointer"
+              >
+                Got it
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
     </div>
   );
 }

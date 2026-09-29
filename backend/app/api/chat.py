@@ -41,49 +41,52 @@ async def chat(request: ChatRequest):
         if not full_answer and not collected_sources:
             return
 
-        pool = await get_db()
+        try:
+            pool = await get_db()
 
-        async with pool.acquire() as conn:
-            async with conn.transaction():
-                # 1. Save user message
-                await conn.execute(
-                    """
-                    INSERT INTO messages (id, role, content, "sessionId")
-                    VALUES (gen_random_uuid(), 'USER', $1, $2)
-                    """,
-                    request.query,
-                    request.session_id,
-                )
-
-                # 2. Save model message and get its id
-                model_msg_id = await conn.fetchval(
-                    """
-                    INSERT INTO messages (id, role, content, "sessionId")
-                    VALUES (gen_random_uuid(), 'MODEL', $1, $2)
-                    RETURNING id
-                    """,
-                    full_answer,
-                    request.session_id,
-                )
-
-                # 3. Save citations
-                if collected_sources:
-                    await conn.executemany(
+            async with pool.acquire() as conn:
+                async with conn.transaction():
+                    # 1. Save user message
+                    await conn.execute(
                         """
-                        INSERT INTO citations
-                            (id, relevance_score, chunk_id, message_id)
-                        VALUES
-                            (gen_random_uuid(), $1, $2, $3)
+                        INSERT INTO messages (id, role, content, "sessionId")
+                        VALUES (gen_random_uuid(), 'USER', $1, $2)
                         """,
-                        [
-                            (
-                                src["relevance_score"],
-                                src["chunk_id"],
-                                model_msg_id,
-                            )
-                            for src in collected_sources
-                        ],
+                        request.query,
+                        request.session_id,
                     )
+
+                    # 2. Save model message and get its id
+                    model_msg_id = await conn.fetchval(
+                        """
+                        INSERT INTO messages (id, role, content, "sessionId")
+                        VALUES (gen_random_uuid(), 'MODEL', $1, $2)
+                        RETURNING id
+                        """,
+                        full_answer,
+                        request.session_id,
+                    )
+
+                    # 3. Save citations
+                    if collected_sources:
+                        await conn.executemany(
+                            """
+                            INSERT INTO citations
+                                (id, "relevanceScore", "chunkId", "messageId")
+                            VALUES
+                                (gen_random_uuid(), $1, $2::uuid, $3)
+                            """,
+                            [
+                                (
+                                    src["relevance_score"],
+                                    src["chunk_id"],
+                                    model_msg_id,
+                                )
+                                for src in collected_sources
+                            ],
+                        )
+        except Exception as exc:
+            logging.error("Failed to persist chat message/citations: %s", exc)
 
     async def streaming_with_persist():
         async for chunk in event_generator():
