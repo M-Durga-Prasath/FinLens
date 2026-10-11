@@ -46,6 +46,7 @@ python-dotenv
 orjson
 httpx
 tenacity
+pyjwt
 
 # Testing
 pytest
