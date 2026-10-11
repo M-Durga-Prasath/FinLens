@@ -5,6 +5,7 @@ import { useSession } from "next-auth/react";
 import Sidebar from "../components/Sidebar";
 import ChatArea from "../components/ChatArea";
 import ChatInput from "../components/ChatInput";
+import { getBackendToken } from "@/lib/backendToken";
 
 const BACKEND_URL = "http://localhost:8000";
 
@@ -201,9 +202,15 @@ export default function ChatPage() {
       setIsStreaming(true);
 
       try {
+        const token = await getBackendToken();
+        const headers = { "Content-Type": "application/json" };
+        if (token) {
+          headers["Authorization"] = `Bearer ${token}`;
+        }
+
         const res = await fetch(`${BACKEND_URL}/chat/`, {
           method: "POST",
-          headers: { "Content-Type": "application/json" },
+          headers,
           body: JSON.stringify({
             query: text,
             session_id: chatId,
@@ -354,8 +361,15 @@ export default function ChatPage() {
         formData.append("user_id", session?.user?.id ?? "");
         formData.append("session_id", chatId);
 
+        const token = await getBackendToken();
+        const headers = {};
+        if (token) {
+          headers["Authorization"] = `Bearer ${token}`;
+        }
+
         const res = await fetch(`${BACKEND_URL}/upload/`, {
           method: "POST",
+          headers,
           body: formData,
         });
         if (!res.ok) {
