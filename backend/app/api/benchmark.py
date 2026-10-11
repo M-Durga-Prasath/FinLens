@@ -4,9 +4,11 @@ import time
 import logging
 import os
 
-from fastapi import APIRouter
+from fastapi import APIRouter, Depends, HTTPException, status
 from fastapi.responses import StreamingResponse
 
+from app.auth.dependencies import get_current_user, verify_session_access
+from app.db.database import get_db
 from app.schemas.utils import ChatRequest
 from app.services.guardrails import validate_query, sanitize_chunks
 from app.services.hybird_retrival import retrieve_hybrid_chunks
@@ -28,7 +30,11 @@ router = APIRouter(
 
 
 @router.post("/")
-async def benchmark_chat(request: ChatRequest):
+async def benchmark_chat(
+    request: ChatRequest,
+    current_user: dict = Depends(get_current_user),
+):
+    await verify_session_access(request.session_id, current_user["userId"])
 
     timings: dict[str, float | None] = {
         "guardrail_ms": None,

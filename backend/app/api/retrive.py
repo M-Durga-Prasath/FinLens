@@ -1,5 +1,8 @@
-from fastapi import APIRouter
+import logging
+from fastapi import APIRouter, Depends, HTTPException, status
 
+from app.auth.dependencies import get_current_user, verify_session_access
+from app.db.database import get_db
 from app.schemas.utils import (
     RetrievalRequest,
     RetrievalResponse,
@@ -16,7 +19,11 @@ router = APIRouter(
 
 
 @router.post("/", response_model=RetrievalResponse)
-async def retrieve(request: RetrievalRequest):
+async def retrieve(
+    request: RetrievalRequest,
+    current_user: dict = Depends(get_current_user),
+):
+    await verify_session_access(request.session_id, current_user["userId"])
 
     results = await retrieve_and_rerank(
         query=request.query,

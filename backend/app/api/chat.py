@@ -1,8 +1,9 @@
 import json
 import logging
-from fastapi import APIRouter
+from fastapi import APIRouter, Depends, HTTPException, status
 from fastapi.responses import StreamingResponse
 
+from app.auth.dependencies import get_current_user, verify_session_access
 from app.db.database import get_db
 from app.schemas.utils import ChatRequest
 from app.services.generator import generate_answer_stream
@@ -15,7 +16,12 @@ router = APIRouter(
 
 
 @router.post("/")
-async def chat(request: ChatRequest):
+async def chat(
+    request: ChatRequest,
+    current_user: dict = Depends(get_current_user),
+):
+    await verify_session_access(request.session_id, current_user["userId"])
+
     collected_tokens: list[str] = []
     collected_sources: list[dict] = []
 

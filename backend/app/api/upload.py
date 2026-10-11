@@ -1,6 +1,9 @@
 import inspect
-from fastapi import APIRouter, HTTPException, File, Form, UploadFile
+import logging
+from fastapi import APIRouter, Depends, HTTPException, File, Form, UploadFile, status
 from uuid import UUID
+from app.auth.dependencies import get_current_user, verify_session_access
+from app.db.database import get_db
 from app.schemas.utils import UploadResponse
 from app.services.extractor import ExtractionError, extract_text
 from app.services.cleaner import clean_text
@@ -26,9 +29,13 @@ CHUNK_SIZE = 1024 * 1024  # 1 MB
 async def upload_doc(
     file: UploadFile = File(...),
     *,
-    user_id: UUID = Form(...),
     session_id: UUID = Form(...),
+    current_user: dict = Depends(get_current_user),
 ):
+
+    authenticated_user_id = UUID(current_user["userId"])
+
+    await verify_session_access(session_id, current_user["userId"])
     normalized_content_type = (
         file.content_type.split(";", 1)[0].strip().lower()
         if file.content_type
@@ -66,7 +73,7 @@ async def upload_doc(
         document_id = await store_document(
             filename=file.filename,
             filetype=normalized_content_type,
-            user_id=user_id,
+            user_id=authenticated_user_id,
             session_id=session_id,
             chunks=embedded_chunks,
         )
