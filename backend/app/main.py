@@ -5,7 +5,7 @@ from app.db.database import connect_db, close_db
 from app.api.upload import router as upload_router
 from app.api.retrive import router as retrival_router
 from app.api.chat import router as chat_router
-from app.api.benchmark import router as benchmark_router
+# from app.api.benchmark import router as benchmark_router
 
 @asynccontextmanager
 async def lifespan(app: FastAPI):
@@ -24,14 +24,14 @@ app.add_middleware(
     CORSMiddleware,
     allow_origins=["http://localhost:3000"],
     allow_credentials=True,
-    allow_methods=["*"],
-    allow_headers=["*"],
+    allow_methods=["GET", "POST", "OPTIONS"],
+    allow_headers=["Authorization", "Content-Type"],
 )
 
 app.include_router(upload_router)
 app.include_router(retrival_router)
 app.include_router(chat_router)
-app.include_router(benchmark_router)
+# app.include_router(benchmark_router)  # Disabled for security
 
 @app.get("/")
 def read_root():
