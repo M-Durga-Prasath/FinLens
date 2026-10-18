@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react";
+import { useState, useEffect } from "react";
 
 export default function MessageBubble({
   role,
@@ -56,10 +56,32 @@ export default function MessageBubble({
 
 function CitationBadge({ source }) {
   const [showTooltip, setShowTooltip] = useState(false);
+  const [fetchedChunkIndex, setFetchedChunkIndex] = useState(null);
 
   const filename = source.document_filename || "Unknown file";
   const page = source.page_number;
   const preview = source.content_preview || "";
+  const chunkIndex =
+    source.chunk_index ??
+    source.chunkIndex ??
+    fetchedChunkIndex;
+
+  useEffect(() => {
+    if (chunkIndex == null && source.chunk_id && showTooltip) {
+      let isMounted = true;
+      fetch(`/api/chunks/${source.chunk_id}`)
+        .then((res) => (res.ok ? res.json() : null))
+        .then((data) => {
+          if (isMounted && data?.chunkIndex != null) {
+            setFetchedChunkIndex(data.chunkIndex);
+          }
+        })
+        .catch(() => {});
+      return () => {
+        isMounted = false;
+      };
+    }
+  }, [chunkIndex, source.chunk_id, showTooltip]);
 
   return (
     <div
@@ -95,35 +117,45 @@ function CitationBadge({ source }) {
             </span>
           </div>
 
-          {/* Page number */}
-          {page != null && (
-            <div className="mb-2 flex items-center gap-1.5">
-              <svg
-                width="12"
-                height="12"
-                viewBox="0 0 16 16"
-                fill="none"
-                className="shrink-0 text-text-tertiary"
-              >
-                <rect
-                  x="2"
-                  y="1"
-                  width="12"
-                  height="14"
-                  rx="1.5"
-                  stroke="currentColor"
-                  strokeWidth="1.3"
-                />
-                <path
-                  d="M5 5h6M5 8h4"
-                  stroke="currentColor"
-                  strokeWidth="1"
-                  strokeLinecap="round"
-                />
-              </svg>
-              <span className="text-[11px] text-text-secondary">
-                Page {page}
-              </span>
+          {/* Page number & Chunk Index */}
+          {(page != null || chunkIndex != null) && (
+            <div className="mb-2 flex flex-wrap items-center gap-2">
+              {page != null && (
+                <div className="flex items-center gap-1.5">
+                  <svg
+                    width="12"
+                    height="12"
+                    viewBox="0 0 16 16"
+                    fill="none"
+                    className="shrink-0 text-text-tertiary"
+                  >
+                    <rect
+                      x="2"
+                      y="1"
+                      width="12"
+                      height="14"
+                      rx="1.5"
+                      stroke="currentColor"
+                      strokeWidth="1.3"
+                    />
+                    <path
+                      d="M5 5h6M5 8h4"
+                      stroke="currentColor"
+                      strokeWidth="1"
+                      strokeLinecap="round"
+                    />
+                  </svg>
+                  <span className="text-[11px] text-text-secondary">
+                    Page {page}
+                  </span>
+                </div>
+              )}
+
+              {chunkIndex != null && (
+                <span className="rounded bg-surface px-1.5 py-0.5 text-[10px] font-medium text-text-secondary border border-border/60">
+                  Chunk #{chunkIndex}
+                </span>
+              )}
             </div>
           )}
 

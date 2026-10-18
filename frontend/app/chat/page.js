@@ -67,6 +67,7 @@ export default function ChatPage() {
                 return {
                   citation_id: idx + 1,
                   chunk_id: c.chunk?.id,
+                  chunk_index: c.chunk?.chunkIndex,
                   document_id: c.chunk?.document?.id,
                   document_filename: c.chunk?.document?.filename || "Unknown",
                   page_number: c.chunk?.pageNumber,

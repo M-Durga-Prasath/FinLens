@@ -37,10 +37,15 @@ def build_sources(chunks: list[dict]) -> list[dict]:
         content = chunk.get("content", "")
         preview = (content[:150] + "…") if len(content) > 150 else content
 
+        chunk_idx = chunk.get("chunk_index")
+        if chunk_idx is None:
+            chunk_idx = chunk.get("chunkIndex")
+
         sources.append(
             {
                 "citation_id": index,
                 "chunk_id": str(chunk["id"]),
+                "chunk_index": chunk_idx,
                 "document_id": str(chunk["document_id"]),
                 "document_filename": chunk["document_filename"],
                 "page_number": chunk["page_number"],

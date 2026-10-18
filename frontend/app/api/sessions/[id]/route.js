@@ -30,6 +30,7 @@ export async function GET(req, { params }) {
                     id: true,
                     content: true,
                     pageNumber: true,
+                    chunkIndex: true,
                     document: {
                       select: {
                         id: true,
