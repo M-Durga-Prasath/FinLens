@@ -1,5 +1,4 @@
 import Google from "next-auth/providers/google";
-import Resend from "next-auth/providers/resend";
 
 /**
  * Auth config shared between the full auth.js (server — has Prisma adapter)
@@ -15,11 +14,6 @@ export const authConfig = {
       allowDangerousEmailAccountLinking: true,
     }),
 
-    Resend({
-      apiKey: process.env.AUTH_RESEND_KEY,
-      from: process.env.AUTH_EMAIL_FROM || "onboarding@resend.dev",
-      allowDangerousEmailAccountLinking: true,
-    }),
   ],
 
   pages: {
@@ -43,6 +37,13 @@ export const authConfig = {
         session.user.id = token.id;
       }
       return session;
+    },
+
+    // Always return users to the chat page after a successful sign-in.
+    async redirect({ url, baseUrl }) {
+      if (url.startsWith(baseUrl)) return url;
+      if (url.startsWith("/")) return `${baseUrl}${url}`;
+      return `${baseUrl}/chat`;
     },
 
     /** Called by middleware to decide access — allow auth pages, block /chat if not signed in. */
