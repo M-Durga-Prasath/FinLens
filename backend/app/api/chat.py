@@ -1,10 +1,11 @@
 import json
 import logging
-from fastapi import APIRouter, Depends, HTTPException, status
+from fastapi import APIRouter, Depends, HTTPException, Request, status
 from fastapi.responses import StreamingResponse
 
 from app.auth.dependencies import get_current_user, verify_session_access
 from app.db.database import get_db
+from app.rate_limiter import limiter
 from app.schemas.utils import ChatRequest
 from app.services.generator import generate_answer_stream
 
@@ -16,11 +17,13 @@ router = APIRouter(
 
 
 @router.post("/")
+@limiter.limit("20/minute")
 async def chat(
-    request: ChatRequest,
+    request: Request,
+    body: ChatRequest,
     current_user: dict = Depends(get_current_user),
 ):
-    await verify_session_access(request.session_id, current_user["userId"])
+    await verify_session_access(body.session_id, current_user["userId"])
 
     collected_tokens: list[str] = []
     collected_sources: list[dict] = []
@@ -28,10 +31,10 @@ async def chat(
     async def event_generator():
 
         async for event in generate_answer_stream(
-            query=request.query,
-            session_id=request.session_id,
-            top_k=request.top_k,
-            candidate_k=request.candidate_k,
+            query=body.query,
+            session_id=body.session_id,
+            top_k=body.top_k,
+            candidate_k=body.candidate_k,
         ):
             if event["type"] in ("token", "answer"):
                 collected_tokens.append(event["content"])
@@ -58,8 +61,8 @@ async def chat(
                         INSERT INTO messages (id, role, content, "sessionId")
                         VALUES (gen_random_uuid(), 'USER', $1, $2)
                         """,
-                        request.query,
-                        request.session_id,
+                        body.query,
+                        body.session_id,
                     )
 
                     # 2. Save model message and get its id
@@ -70,7 +73,7 @@ async def chat(
                         RETURNING id
                         """,
                         full_answer,
-                        request.session_id,
+                        body.session_id,
                     )
 
                     # 3. Save citations

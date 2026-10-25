@@ -1,9 +1,10 @@
 import inspect
 import logging
-from fastapi import APIRouter, Depends, HTTPException, File, Form, UploadFile, status
+from fastapi import APIRouter, Depends, HTTPException, File, Form, Request, UploadFile, status
 from uuid import UUID
 from app.auth.dependencies import get_current_user, verify_session_access
 from app.db.database import get_db
+from app.rate_limiter import limiter
 from app.schemas.utils import UploadResponse
 from app.services.extractor import ExtractionError, extract_text
 from app.services.cleaner import clean_text
@@ -26,7 +27,9 @@ CHUNK_SIZE = 1024 * 1024  # 1 MB
 
 
 @router.post("/", response_model=UploadResponse)
+@limiter.limit("10/minute")
 async def upload_doc(
+    request: Request,
     file: UploadFile = File(...),
     *,
     session_id: UUID = Form(...),

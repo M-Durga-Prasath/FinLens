@@ -1,10 +1,13 @@
+import os
 from contextlib import asynccontextmanager
 from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
+from slowapi.middleware import SlowAPIMiddleware
 from app.db.database import connect_db, close_db
 from app.api.upload import router as upload_router
 from app.api.retrive import router as retrival_router
 from app.api.chat import router as chat_router
+from app.rate_limiter import install_rate_limiter
 # from app.api.benchmark import router as benchmark_router
 
 @asynccontextmanager
@@ -20,9 +23,13 @@ app = FastAPI(
     lifespan=lifespan
 )
 
+# --- Rate Limiting ---
+install_rate_limiter(app)
+app.add_middleware(SlowAPIMiddleware)
+
 app.add_middleware(
     CORSMiddleware,
-    allow_origins=["http://localhost:3000"],
+    allow_origins=[os.getenv("FRONTEND_URL", "http://localhost:3000")],
     allow_credentials=True,
     allow_methods=["GET", "POST", "OPTIONS"],
     allow_headers=["Authorization", "Content-Type"],
