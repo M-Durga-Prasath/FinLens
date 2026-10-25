@@ -8,7 +8,6 @@ pydantic-settings
 # PDF Processing
 pymupdf
 pypdf
-BeautifulSoup
 python-docx
 
 # Chunking
@@ -47,6 +46,8 @@ orjson
 httpx
 tenacity
 pyjwt
+slowapi
+redis
 
 # Testing
 pytest
