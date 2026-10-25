@@ -70,30 +70,30 @@ FinLens is a high-performance Retrieval-Augmented Generation (RAG) platform purp
 
 ```mermaid
 graph TD
-    subgraph Ingestion Pipeline
-        A[User Uploads PDF / DOCX / HTML / TXT] --> B[Text & Structure Extraction]
-        B --> C[Text Cleaning & Normalization]
-        C --> D[Token-Aware Chunking (tiktoken cl100k_base, 1200 chars / 200 overlap)]
-        D --> E1[SentenceTransformer Embeddings (384-dim)]
-        D --> E2[Sparse BM25 In-Memory Indexer]
-        E1 --> F[(PostgreSQL + pgvector)]
+    subgraph Ingestion_Pipeline ["Ingestion Pipeline"]
+        A["User Uploads PDF / DOCX / HTML / TXT"] --> B["Text & Structure Extraction"]
+        B --> C["Text Cleaning & Normalization"]
+        C --> D["Token-Aware Chunking (tiktoken cl100k_base, 1200 chars / 200 overlap)"]
+        D --> E1["SentenceTransformer Embeddings (384-dim)"]
+        D --> E2["Sparse BM25 In-Memory Indexer"]
+        E1 --> F[("PostgreSQL + pgvector")]
     end
 
-    subgraph Query & Security Pipeline
-        G[User Query] --> H{Guardrail Validator}
-        H -->|Injection Detected| H_ERR[Return Friendly Guardrail Warning]
-        H -->|Sanitized & Validated| I1[Dense Vector Search (pgvector cosine)]
-        H -->|Sanitized & Validated| I2[Sparse BM25 Search]
-        I1 --> J[Reciprocal Rank Fusion (RRF k=60)]
+    subgraph Query_Pipeline ["Query & Security Pipeline"]
+        G["User Query"] --> H{"Guardrail Validator"}
+        H -->|"Injection Detected"| H_ERR["Return Friendly Guardrail Warning"]
+        H -->|"Sanitized & Validated"| I1["Dense Vector Search (pgvector cosine)"]
+        H -->|"Sanitized & Validated"| I2["Sparse BM25 Search"]
+        I1 --> J["Reciprocal Rank Fusion (RRF k=60)"]
         I2 --> J
-        J --> K[Candidate Chunks (k=20)]
-        K --> L[Cross-Encoder Reranker (ms-marco-MiniLM-L-6-v2)]
-        L --> M[Hybrid-Aware Selection (Precision + Coverage Slots)]
-        M --> N[Document Sanitizer (Redact Indirect Injections)]
-        N --> O[Context Assembly + Citations Mapping]
-        O --> P[Google Gemini LLM Stream]
-        P --> Q[SSE Streaming Response to Next.js Client]
-        Q --> R[(PostgreSQL Messages & Citations Persistence)]
+        J --> K["Candidate Chunks (k=20)"]
+        K --> L["Cross-Encoder Reranker (ms-marco-MiniLM-L-6-v2)"]
+        L --> M["Hybrid-Aware Selection (Precision + Coverage Slots)"]
+        M --> N["Document Sanitizer (Redact Indirect Injections)"]
+        N --> O["Context Assembly + Citations Mapping"]
+        O --> P["Google Gemini LLM Stream"]
+        P --> Q["SSE Streaming Response to Next.js Client"]
+        Q --> R[("PostgreSQL Messages & Citations Persistence")]
     end
 ```
 
