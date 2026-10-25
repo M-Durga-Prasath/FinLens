@@ -1,9 +1,13 @@
 import { auth } from "@/auth";
 import { prisma } from "@/lib/prisma";
+import { readLimiter, writeLimiter } from "@/lib/rateLimit";
 import { NextResponse } from "next/server";
 
 export async function GET(req, { params }) {
   try {
+    const blocked = await readLimiter.check(req);
+    if (blocked) return blocked;
+
     const session = await auth();
     if (!session?.user?.id) {
       return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
@@ -66,6 +70,9 @@ export async function GET(req, { params }) {
 
 export async function PATCH(req, { params }) {
   try {
+    const blocked = await writeLimiter.check(req);
+    if (blocked) return blocked;
+
     const session = await auth();
     if (!session?.user?.id) {
       return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
@@ -116,6 +123,9 @@ export async function PATCH(req, { params }) {
 
 export async function DELETE(req, { params }) {
   try {
+    const blocked = await writeLimiter.check(req);
+    if (blocked) return blocked;
+
     const session = await auth();
     if (!session?.user?.id) {
       return NextResponse.json({ error: "Unauthorized" }, { status: 401 });

@@ -1,9 +1,13 @@
 import { auth } from "@/auth";
+import { authLimiter } from "@/lib/rateLimit";
 import { NextResponse } from "next/server";
 import { SignJWT } from "jose";
 
-export async function GET() {
+export async function GET(req) {
   try {
+    const blocked = await authLimiter.check(req);
+    if (blocked) return blocked;
+
     const secretKey = process.env.BACKEND_AUTH_SECRET;
     const session = await auth();
 
